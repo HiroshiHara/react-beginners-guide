@@ -1,21 +1,56 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>simple</title>
-    <meta charset="utf-8" content="">
-  </head>
-  <body>
-    <div id="app">
-      <!-- アプリケーションはここに描画される -->
-    </div>
-    <script src="lib/react-15.4.1/build/react.js" charset="utf-8"></script>
-    <script src="lib/react-15.4.1/build/react-dom.js" charset="utf-8"></script>
-    <script type="text/javascript">
-      // アプリケーションのコード
-      ReactDOM.render(
-        React.DOM.h1(null, 'Hello, world!'),
-        document.getElementById('app')
-      );
-    </script>
-  </body>
+<head>
+  <title>simple</title>
+  <meta charset="utf-8" content="">
+</head>
+<body>
+  <div id="app">
+    <!-- アプリケーションはここに描画される -->
+  </div>
+  <div id="app2">
+
+  </div>
+  <script src="lib/react-15.4.1/build/react.js" charset="utf-8"></script>
+  <script src="lib/react-15.4.1/build/react-dom.js" charset="utf-8"></script>
+  <script type="text/javascript">
+    // アプリケーションのコード
+    ReactDOM.render(
+      React.DOM.h1(null, 'Hello, world!'),
+      document.getElementById('app')
+    );
+    // React.DOM.h1メソッドを見ていく
+    // 第一引数... 属性と値を連想配列で指定する。
+    // 第二引数(可変長)... h1要素の子要素を定義する。textノードでも良いし、コンポーネントでもいい。
+    // 可変長引数を追加することで兄弟要素にすることもできる。
+    ReactDOM.render(
+      React.DOM.h1(
+        {
+          id: 'title',
+          class: 'big-text'
+        },
+        React.DOM.p(
+          null,
+          'いろはにほへと'
+        ),
+        'ちりぬるを'
+      ),
+      document.getElementById('app')
+    );
+
+    ReactDOM.render(
+      React.DOM.h2(
+        { id: 'title2' },
+        React.DOM.span(null,
+          React.DOM.em(null, 'Hell'),
+          'o'
+        ),
+        ' world!'
+      ),
+      document.getElementById('app2')
+    );
+
+
+  </script>
+</body>
 </html>
