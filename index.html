@@ -9,7 +9,19 @@
     <!-- アプリケーションはここに描画される -->
   </div>
   <div id="app2">
-
+    <!-- アプリケーションはここに描画される -->
+  </div>
+  <div id="app3">
+    <!-- ここにコンポーネントを描画 -->
+  </div>
+  <div id="app4">
+    <!-- ここにコンポーネントを描画 -->
+  </div>
+  <div id="app5">
+    <!-- ここにコンポーネントを描画 -->
+  </div>
+  <div id="app6">
+    <!-- ここにコンポーネントを描画 -->
   </div>
   <script src="lib/react-15.4.1/build/react.js" charset="utf-8"></script>
   <script src="lib/react-15.4.1/build/react-dom.js" charset="utf-8"></script>
@@ -27,7 +39,7 @@
       React.DOM.h1(
         {
           id: 'title',
-          class: 'big-text'
+          className: 'big-text'
         },
         React.DOM.p(
           null,
@@ -50,7 +62,55 @@
       document.getElementById('app2')
     );
 
+    // React.DOMメソッドは,React.createElementメソッドをラップしたもの。
+    // 以下のように書くこともできる。
+    // DOM要素を文字列で指定する。
+    ReactDOM.render(
+      React.createElement('a', {
+        href: 'https://www.google.com'
+      }, 'google'),
+      document.getElementById('app6')
+    );
 
+    const MyComponent = React.createClass({
+      /* スペック(javascriptのオブジェクト)を記述する */
+      // rendarのみ必須
+      render: function () {
+        return React.DOM.span(null, 'カスタムコンポーネント');
+      }
+    });
+
+    const MyComponent2 = React.createClass({
+      render: function () {
+        return React.DOM.h3(
+          {
+            style: {
+              background: "red",
+              color: "white"
+            }
+          },
+          'This is CustomComponent!');
+      }
+    });
+
+    // 自作コンポーネントの呼び出し
+    ReactDOM.render(
+      // createElement... コンポーネントの「インスタンス」を作るメソッド
+      React.createElement(MyComponent),
+      document.getElementById('app3')
+    );
+
+    // インスタンスを複数作る場合は、ファクトリメソッドを使用するとよい
+    const ComponentFactory2 = React.createFactory(MyComponent2);
+    ReactDOM.render(
+      ComponentFactory2(),
+      document.getElementById('app4')
+    );
+
+    ReactDOM.render(
+      ComponentFactory2(),
+      document.getElementById('app5')
+    );
   </script>
 </body>
 </html>
