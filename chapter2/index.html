@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>chapter2</title>
+  <meta charset="utf-8" content="">
+</head>
+<body>
+  <div id="app1">
+    <!-- ここにコンポーネントを描画 -->
+  </div>
+  <div id="app2">
+    <!-- ここにコンポーネントを描画 -->
+  </div>
+  <div id="app3">
+    <!-- ここにコンポーネントを描画 -->
+  </div>
+  <div id="app4">
+    <!-- ここにコンポーネントを描画 -->
+  </div>
+  <div id="app5">
+    <!-- ここにコンポーネントを描画 -->
+  </div>
+  <div id="app6">
+    <!-- ここにコンポーネントを描画 -->
+  </div>
+  <script src="../lib/react-15.4.1/build/react.js" charset="utf-8"></script>
+  <script src="../lib/react-15.4.1/build/react-dom.js" charset="utf-8"></script>
+  <script type="text/javascript">
+    // 2.1 自作コンポーネント
+    const MyCompoment1 = React.createClass({
+      render: function () {
+        return React.DOM.h1(null, 'This is Custom Compoment!');
+      }
+    });
+    // 2.2 コンポーネントにプロパティを追加
+    const MyCompoment2 = React.createClass({
+      render: function () {
+        return React.DOM.p(null, 'My name is ' + this.props.name + '! My age is ' + this.props.age + '. at ' + this.props.from + '.');
+      }
+    });
+    // 2.3 プロパティの型を制限する
+    const MyCompoment3 = React.createClass({
+      propTypes: {
+        linkname: React.PropTypes.string.isRequired
+      },
+      render: function () {
+        return React.DOM.a({
+          href: 'https://www.google.com'
+        },
+          'Go to ' + this.props.linkname + '!'
+        )
+      }
+    });
+    // 自作コンポーネントの呼び出し
+    ReactDOM.render(
+      React.createElement(MyCompoment1),
+      document.getElementById('app1')
+    );
+    ReactDOM.render(
+      React.createElement(MyCompoment2, {
+        name: 'Hiroshi Hara',
+        age: 28,
+        from: 'Osaka'
+      }),
+      document.getElementById('app2')
+    );
+    ReactDOM.render(
+      React.createElement(MyCompoment3, {
+        linkname: 'google'
+      }),
+      document.getElementById('app3')
+    );
+  </script>
+</body>
+</html>
