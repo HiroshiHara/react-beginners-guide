@@ -27,19 +27,19 @@
   <script src="../lib/react-15.4.1/build/react-dom.js" charset="utf-8"></script>
   <script type="text/javascript">
     // 2.1 自作コンポーネント
-    const MyCompoment1 = React.createClass({
+    const MyComponent1 = React.createClass({
       render: function () {
         return React.DOM.h1(null, 'This is Custom Compoment!');
       }
     });
     // 2.2 コンポーネントにプロパティを追加
-    const MyCompoment2 = React.createClass({
+    const MyComponent2 = React.createClass({
       render: function () {
         return React.DOM.p(null, 'My name is ' + this.props.name + '! My age is ' + this.props.age + '. at ' + this.props.from + '.');
       }
     });
     // 2.3 プロパティの型を制限する
-    const MyCompoment3 = React.createClass({
+    const MyComponent3 = React.createClass({
       propTypes: {
         linkname: React.PropTypes.string.isRequired
       },
@@ -51,13 +51,34 @@
         )
       }
     });
+    // 2.3.1 プロパティのデフォルト値を設定する
+    const MyComponent4 = React.createClass({
+      propTypes: {
+        firstName: React.PropTypes.string.isRequired,
+        middleName: React.PropTypes.string,
+        familyName: React.PropTypes.string.isRequired,
+        address: React.PropTypes.string
+      },
+      /* getDefaultProps()を定義することで、
+      isRequiredが指定されていないプロパティのデフォルト値を定義でいる。 */
+      getDefaultProps: function () {
+        return {
+          middleName: '',
+          address: 'なし'
+        };
+      },
+      render: function () {
+        return React.DOM.p(null, this.props.firstName + ':' + this.props.middleName + ':' + this.props.familyName + '::' + this.props.address)
+      }
+    });
+
     // 自作コンポーネントの呼び出し
     ReactDOM.render(
-      React.createElement(MyCompoment1),
+      React.createElement(MyComponent1),
       document.getElementById('app1')
     );
     ReactDOM.render(
-      React.createElement(MyCompoment2, {
+      React.createElement(MyComponent2, {
         name: 'Hiroshi Hara',
         age: 28,
         from: 'Osaka'
@@ -65,10 +86,17 @@
       document.getElementById('app2')
     );
     ReactDOM.render(
-      React.createElement(MyCompoment3, {
+      React.createElement(MyComponent3, {
         linkname: 'google'
       }),
       document.getElementById('app3')
+    );
+    ReactDOM.render(
+      React.createElement(MyComponent4, {
+        firstName: 'Chris',
+        familyName: 'Coleman'
+      }),
+      document.getElementById('app4')
     );
   </script>
 </body>
