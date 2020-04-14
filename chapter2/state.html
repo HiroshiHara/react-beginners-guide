@@ -6,6 +6,64 @@
   <title>2.4 state</title>
 </head>
 <body>
+  <div id='app1'></div>
+  <div id='app2'></div>
+  <div id='app3'></div>
+  <div id='app4'></div>
+  <div id='app5'></div>
+  <div id='app6'></div>
+  <div id='app7'></div>
+  <script src="../lib/react-15.4.1/build/react.js" charset="utf-8"></script>
+  <script src="../lib/react-15.4.1/build/react-dom.js" charset="utf-8"></script>
+  <script text="type/javascript">
+    /* ステート(状態) */
+    /* コンポーネントは自分自身のステートの変更を感知して、自動的に自らを更新する。
+    this.setState()を実行するとコンポーネントのステートが変更され、
+    自動的にrender()メソッドが再実行される。 */
+    const TextAreaCounter = React.createClass({
+      PropTypes: {
+        text: React.PropTypes.string
+      },
+      getDefaultProps: function () {
+        return {
+          text: ''
+        }
+      },
+      // stateの初期値がどのプロパティか明示的に指定する
+      getInitialState: function () {
+        return {
+          text: this.props.text
+        };
+      },
+      // stateを更新するイベントリスナー
+      _textChange: function (ev) {
+        this.setState({
+          text: ev.target.value
+        });
+      },
+      // renderでtextの取得元をpropsではなくstateにする
+      render: function () {
+        return React.DOM.div(null,
+          React.DOM.textarea({
+            style: {
+              width: '400px',
+              height: '250px'
+            },
+            value: this.state.text,
+            onChange: this._textChange,
+          }),
+          React.DOM.h3(null, this.state.text.length)
+        );
+      }
+    });
 
+    // コンポーネントの描画
+    ReactDOM.render(
+      React.createElement(TextAreaCounter, {
+        text: 'enter some words!'
+      }),
+      document.getElementById('app1')
+    );
+  </script>
 </body>
 </html>
