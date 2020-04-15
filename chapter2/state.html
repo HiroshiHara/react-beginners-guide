@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>2.4-2.9 state</title>
+  <title>2.4-2.11 state</title>
 </head>
 <body>
   <div id='app1'></div>
@@ -22,7 +22,7 @@
     自動的にrender()メソッドが再実行される。 */
     const TextAreaCounter = React.createClass({
       PropTypes: {
-        defaultValue: React.PropTypes.string
+        defaultValue: React.PropTypes.string,
       },
       getDefaultProps: function () {
         return {
@@ -41,6 +41,40 @@
         this.setState({
           text: ev.target.value
         });
+      },
+      /* ライフサイクルのメソッド */
+      // 外部からプロパティの変更を受けた場合、それに応じてstateを更新するメソッド
+      componentWillReceiveProps: function (newProps) {
+        this.setState({
+          text: newProps.defaultValue
+        });
+      },
+      // コンポーネントの2回目以降の更新時に実行されるメソッド
+      componentWillUpdate: function () {
+
+      },
+      // コンポーネントの更新が完了しDOMへの変更が反映されたときに実行されるメソッド
+      componentDidUpdate: function () {
+
+      },
+      // ノードがDOMに挿入される直前に実行されるメソッド
+      componentWillMount: function () {
+
+      },
+      // ノードがDOMに挿入された直後に実行されるメソッド
+      componentDidMount: function () {
+
+      },
+      // コンポーネントがDOMから削除される直前に実行されるメソッド
+      componentWillunmount: function () {
+
+      },
+      // コンポーネントが更新される直前に呼ばれる。更新する必要があるかどうかを判定できる
+      shouldComponentUpdate: function (newProps, newState) {
+        if (newState.text.length <= this.state.text.length) {
+          return false;
+        }
+        return true;
       },
       // renderでtextの取得元をpropsではなくstateにする
       render: function () {
