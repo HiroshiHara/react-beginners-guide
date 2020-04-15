@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>2.4 state</title>
+  <title>2.4-2.9 state</title>
 </head>
 <body>
   <div id='app1'></div>
@@ -22,17 +22,18 @@
     自動的にrender()メソッドが再実行される。 */
     const TextAreaCounter = React.createClass({
       PropTypes: {
-        text: React.PropTypes.string
+        defaultValue: React.PropTypes.string
       },
       getDefaultProps: function () {
         return {
-          text: ''
+          defaultValue: ''
         }
       },
       // stateの初期値がどのプロパティか明示的に指定する
       getInitialState: function () {
         return {
-          text: this.props.text
+          // stateで扱うプロパティ名と初期値は判別できるように名前を変えること
+          text: this.props.defaultValue
         };
       },
       // stateを更新するイベントリスナー
@@ -60,10 +61,14 @@
     // コンポーネントの描画
     ReactDOM.render(
       React.createElement(TextAreaCounter, {
-        text: 'enter some words!'
+        defaultValue: 'enter some words!'
       }),
       document.getElementById('app1')
     );
+
+    /* ReactDOM.render()の戻り値(コンポーネントの参照)を使って、
+    直接コンポーネントの状態をいじることもできるけど、非推奨だから説明は割愛*/
+
   </script>
 </body>
 </html>
