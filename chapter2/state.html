@@ -54,20 +54,30 @@
         console.log(methodName, args);
       },
       // コンポーネントの2回目以降の更新時に実行されるメソッド
-      componentWillUpdate: function () {
+      // arg1が新しいthis.props, arg2が新しいthis.state。比較して処理の分岐などに使用。
+      componentWillUpdate: function (newProps, newState) {
         this._log('componentWillUpdate', arguments);
+        if (newState.text.length > this.state.text.length) {
+          console.log('長くなるよ!');
+        }
       },
       // コンポーネントの更新が完了しDOMへの変更が反映されたときに実行されるメソッド
-      componentDidUpdate: function () {
+      // arg1が古いthis.props, arg2が古いthis.state。this.setState()呼び出し可。
+      componentDidUpdate: function (oldProps, oldState) {
         this._log('componentDidUpdate', arguments);
+        if (this.state.text.length > 3) {
+          console.log(oldState);
+        }
       },
       // ノードがDOMに挿入される直前に実行されるメソッド
       componentWillMount: function () {
         this._log('componentWillMount', arguments);
       },
       // ノードがDOMに挿入された直後に実行されるメソッド
+      // この時点でDOMは追加済みなので、ReactDOM.findDOMNode(this)でコンポーネントにアクセスできる。
       componentDidMount: function () {
         this._log('componentDidMount', arguments);
+        console.log(ReactDOM.findDOMNode(this));
       },
       // コンポーネントがDOMから削除される直前に実行されるメソッド
       componentWillUnmount: function () {
@@ -99,7 +109,7 @@
     // コンポーネントの描画
     ReactDOM.render(
       React.createElement(TextAreaCounter, {
-        defaultValue: 'enter some words!'
+        defaultValue: ''
       }),
       document.getElementById('app1')
     );
