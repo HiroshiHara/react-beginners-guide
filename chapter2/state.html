@@ -49,25 +49,29 @@
           text: newProps.defaultValue
         });
       },
+      // ライフサイクルのログを出力するメソッド
+      _log: function (methodName, args) {
+        console.log(methodName, args);
+      },
       // コンポーネントの2回目以降の更新時に実行されるメソッド
       componentWillUpdate: function () {
-
+        this._log('componentWillUpdate', arguments);
       },
       // コンポーネントの更新が完了しDOMへの変更が反映されたときに実行されるメソッド
       componentDidUpdate: function () {
-
+        this._log('componentDidUpdate', arguments);
       },
       // ノードがDOMに挿入される直前に実行されるメソッド
       componentWillMount: function () {
-
+        this._log('componentWillMount', arguments);
       },
       // ノードがDOMに挿入された直後に実行されるメソッド
       componentDidMount: function () {
-
+        this._log('componentDidMount', arguments);
       },
       // コンポーネントがDOMから削除される直前に実行されるメソッド
-      componentWillunmount: function () {
-
+      componentWillUnmount: function () {
+        this._log('componentWillUnmount', arguments);
       },
       // コンポーネントが更新される直前に呼ばれる。更新する必要があるかどうかを判定できる
       shouldComponentUpdate: function (newProps, newState) {
