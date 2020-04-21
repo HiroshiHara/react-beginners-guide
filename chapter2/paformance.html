@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2.15 paformance</title>
+</head>
+<body>
+  <div id='app1'></div>
+  <div id='app2'></div>
+  <div id='app3'></div>
+  <div id='app4'></div>
+  <div id='app5'></div>
+  <div id='app6'></div>
+  <div id='app7'></div>
+  <script src="../lib/react-15.4.1/build/react.js" charset="utf-8"></script>
+  <script src="../lib/react-15.4.1/build/react-dom.js" charset="utf-8"></script>
+  <script src="../lib/react-15.4.1/build/react-with-addons.js" charset="utf-8"></script>
+  <script text="type/javascript">
+    const Counter = React.createClass({
+      name: 'Counter',
+      PropTypes: {
+        count: React.PropTypes.number.isRequired
+      },
+      // 更新前後の文字数が等しいとき、render()の実行は単なるロスなので
+      // shouldComponentUpdateで更新可否を判断する。
+      // 第一引数が次のProps, 第二引数が次のState
+      // shouldComponentUpdate: function (newProps, newState) {
+      //   console.log(arguments);
+      //   return newProps.count !== this.props.count;
+      // },
+      // shouldComponentUpdateでの更新前後の比較は頻繁に実装されるので、
+      // アドオンのミックスインとして提供されている。
+      mixins: [React.addons.PureRenderMixin],
+      render: function () {
+        console.log(this.name + '::render()');
+        return React.DOM.span(null, this.props.count);
+      }
+    });
+    const TextAreaCounter = React.createClass({
+      name: 'TextAreaCounter',
+      PropTypes: {
+        defaultValue: React.PropTypes.string
+      },
+      getDefaultProps: function () {
+        return {
+          defaultValue: ''
+        }
+      },
+      getInitialState: function () {
+        return {
+          text: this.props.defaultValue
+        }
+      },
+      _textChange: function (ev) {
+        this.setState({
+          text: ev.target.value
+        });
+      },
+      componentWillReceiveProps: function (newProps) {
+        this.setState({
+          text: newProps.defaultValue
+        });
+      },
+      render: function () {
+        console.log(this.name + '::render()');
+        let counter = null;
+        if (this.state.text.length > 0) {
+          counter = React.DOM.h3(null,
+            React.createElement(Counter, {
+              count: this.state.text.length
+            })
+          );
+        }
+        return React.DOM.div(null,
+          React.DOM.textarea({
+            value: this.state.text,
+            onChange: this._textChange
+          }),
+          counter
+        );
+      }
+    })
+
+    ReactDOM.render(
+      React.createElement(TextAreaCounter),
+      document.getElementById('app1')
+    );
+  </script>
+</body>
+</html>
