@@ -6,7 +6,7 @@ import Logo from './components/Logo';
 
 ReactDOM.render(
   <h1>
-    <Logo>Hello, World!</Logo>
+    <Logo />Hello, World!
   </h1>,
   document.getElementById('app')
 );

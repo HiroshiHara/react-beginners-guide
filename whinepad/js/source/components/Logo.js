@@ -1,10 +1,9 @@
 import React from 'react'
 
-const Logo = React.createClass({
-  displayName: 'Logo',
-  render: function () {
-    return <div className="Logo"></div>
+class Logo extends React.Component {
+  render() {
+    return <div className="Logo" />;
   }
-});
+}
 
 export default Logo
