@@ -248,17 +248,59 @@ _reactDom2.default.render(_react2.default.createElement(
   _react2.default.createElement(
     'h1',
     null,
-    'List of Compoment'
+    'Test for Compoments'
   ),
   _react2.default.createElement(
     'h2',
     null,
-    '\u30FBLogo'
+    '\u25A0Logo'
   ),
   _react2.default.createElement(
     'div',
     { style: { display: 'inline-block', background: 'purple' } },
-    _react2.default.createElement(_Logo2.default, null)
+    _react2.default.createElement(
+      'div',
+      null,
+      '\u30FBJust Only print Logo image.',
+      _react2.default.createElement(_Logo2.default, null)
+    )
+  ),
+  _react2.default.createElement(
+    'h2',
+    null,
+    '\u25A0Button'
+  ),
+  _react2.default.createElement(
+    'div',
+    null,
+    '\u30FBApply onClick-attribute Button.',
+    _react2.default.createElement(
+      Button,
+      { onClick: function onClick() {
+          return alert('Clicked!');
+        } },
+      'Button'
+    )
+  ),
+  _react2.default.createElement(
+    'div',
+    null,
+    '\u30FBApply href-attribute Button.',
+    _react2.default.createElement(
+      Button,
+      { href: 'http://reactjs.com' },
+      'Button'
+    )
+  ),
+  _react2.default.createElement(
+    'div',
+    null,
+    '\u30FBApply className-attribute Button.',
+    _react2.default.createElement(
+      Button,
+      { className: 'custom' },
+      'Button'
+    )
   )
 ), document.getElementById('pad'));
 },{"./components/Logo":2,"react":12,"react-dom":9}],4:[function(require,module,exports){
