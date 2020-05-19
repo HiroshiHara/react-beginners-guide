@@ -12,6 +12,10 @@ var _Logo = require('./components/Logo');
 
 var _Logo2 = _interopRequireDefault(_Logo);
 
+var _Button = require('./components/Button');
+
+var _Button2 = _interopRequireDefault(_Button);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 _reactDom2.default.render(_react2.default.createElement(
@@ -47,7 +51,7 @@ _reactDom2.default.render(_react2.default.createElement(
     null,
     '\u30FBApply onClick-attribute Button.',
     _react2.default.createElement(
-      Button,
+      _Button2.default,
       { onClick: function onClick() {
           return alert('Clicked!');
         } },
@@ -59,7 +63,7 @@ _reactDom2.default.render(_react2.default.createElement(
     null,
     '\u30FBApply href-attribute Button.',
     _react2.default.createElement(
-      Button,
+      _Button2.default,
       { href: 'http://reactjs.com' },
       'Button'
     )
@@ -69,7 +73,7 @@ _reactDom2.default.render(_react2.default.createElement(
     null,
     '\u30FBApply className-attribute Button.',
     _react2.default.createElement(
-      Button,
+      _Button2.default,
       { className: 'custom' },
       'Button'
     )

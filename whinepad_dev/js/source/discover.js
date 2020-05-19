@@ -3,6 +3,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Logo from './components/Logo';
+import Button from './components/Button';
 
 ReactDOM.render(
   <div style={{ padding: '20px' }}>
