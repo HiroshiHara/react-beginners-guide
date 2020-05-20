@@ -16,6 +16,10 @@ var _Button = require('./components/Button');
 
 var _Button2 = _interopRequireDefault(_Button);
 
+var _Suggest = require('./components/Suggest');
+
+var _Suggest2 = _interopRequireDefault(_Suggest);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 _reactDom2.default.render(_react2.default.createElement(
@@ -77,5 +81,16 @@ _reactDom2.default.render(_react2.default.createElement(
       { className: 'custom' },
       'Button'
     )
+  ),
+  _react2.default.createElement(
+    'h2',
+    null,
+    '\u25A0Suggest'
+  ),
+  _react2.default.createElement(
+    'div',
+    null,
+    '\u30FBPrint datalist element.',
+    _react2.default.createElement(_Suggest2.default, { options: ['eenie', 'meenie', 'miney', 'mo'] })
   )
 ), document.getElementById('pad'));

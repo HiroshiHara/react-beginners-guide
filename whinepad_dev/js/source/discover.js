@@ -4,6 +4,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import Logo from './components/Logo';
 import Button from './components/Button';
+import Suggest from './components/Suggest';
 
 ReactDOM.render(
   <div style={{ padding: '20px' }}>
@@ -26,6 +27,12 @@ ReactDOM.render(
     <div>
       ・Apply className-attribute Button.
       <Button className='custom'>Button</Button>
+    </div>
+
+    <h2>■Suggest</h2>
+    <div>
+      ・Print datalist element.
+      <Suggest options={['eenie', 'meenie', 'miney', 'mo']} />
     </div>
   </div>,
   document.getElementById('pad')
