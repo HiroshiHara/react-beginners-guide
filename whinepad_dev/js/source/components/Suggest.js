@@ -13,10 +13,12 @@ class Suggest extends Component {
       value: props.defaultValue
     }
   }
+  // フォームに入力されている値を取得するメソッド
   getValue() {
     return this.state.value;
   }
   render() {
+    // 適当な英数字の羅列を生成
     const randomid = Math.random().toString(16).substring(2);
     return (
       <div>
