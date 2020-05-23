@@ -62,6 +62,43 @@ ReactDOM.render(
       </div>
     </div>
 
+    <div className='container' style={{ padding: '10px', marginBottom: '32px', border: 'solid' }}>
+      <h2>■FormInput</h2>
+      <table>
+        <tbody>
+          <tr>
+            <td>A simple input field.</td>
+            <td><FormInput /></td>
+          </tr>
+          <tr>
+            <td>Set default value.</td>
+            <td><FormInput defaultValue={'This is defalutvalue.'} /></td>
+          </tr>
+          <tr>
+            <td>Input field for year.</td>
+            <td><FormInput type='year' /></td>
+          </tr>
+          <tr>
+            <td>Input field for Rating.</td>
+            <td><FormInput type='rating' defaultValue={4} /></td>
+          </tr>
+          <tr>
+            <td>Input field for Suggest.</td>
+            <td>
+              <FormInput
+                type="suggest"
+                options={['red', 'blue', 'green']}
+                defalutValue="green"
+              />
+            </td>
+          </tr>
+          <tr>
+            <td>A simple textarea</td>
+            <td><FormInput type="text" /></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>,
   document.getElementById('pad')
 );
