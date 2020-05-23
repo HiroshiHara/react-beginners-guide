@@ -233,7 +233,7 @@ Button.propsTypes = {
 };
 
 exports.default = Button;
-},{"classnames":6,"prop-types":11,"react":21}],3:[function(require,module,exports){
+},{"classnames":7,"prop-types":12,"react":22}],3:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -274,7 +274,140 @@ var Logo = function (_React$Component) {
 }(_react2.default.Component);
 
 exports.default = Logo;
-},{"react":21}],4:[function(require,module,exports){
+},{"react":22}],4:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _propTypes = require('prop-types');
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+var _classnames = require('classnames');
+
+var _classnames2 = _interopRequireDefault(_classnames);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Rating = function (_Component) {
+  _inherits(Rating, _Component);
+
+  function Rating(props) {
+    _classCallCheck(this, Rating);
+
+    var _this = _possibleConstructorReturn(this, (Rating.__proto__ || Object.getPrototypeOf(Rating)).call(this, props));
+
+    _this.state = {
+      rating: props.defaultValue,
+      tmpRating: props.defaultValue
+    };
+    return _this;
+  }
+
+  _createClass(Rating, [{
+    key: 'getValue',
+    value: function getValue() {
+      return this.state.rating;
+    }
+    /* Fire on Mouseover. */
+
+  }, {
+    key: 'setTemp',
+    value: function setTemp(rating) {
+      this.setState({
+        tmpRating: rating
+      });
+    }
+    /* Fire on Click. */
+
+  }, {
+    key: 'setRating',
+    value: function setRating(rating) {
+      this.setState({
+        tmpRating: rating,
+        rating: rating
+      });
+    }
+    /* Fire on Mouseout, then clear rating. */
+
+  }, {
+    key: 'reset',
+    value: function reset() {
+      this.setTemp(this.state.rating);
+    }
+    /* Response external access to props */
+
+  }, {
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(newProps) {
+      this.setRating(newProps.defaultValue);
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      // Print stars this.props.max time.
+      var stars = [];
+      for (var i = 1; i <= this.props.max; i++) {
+        stars.push(_react2.default.createElement(
+          'span',
+          {
+            /* 現在の☆の数まで色づけ */
+            className: i <= this.state.tmpRating ? 'RatingOn' : null,
+            key: i
+            /* readonlyでないならonClick時にRatingを決定 */
+            , onClick: !this.props.readonly ? this.setRating.bind(this, i) : undefined
+            /* readonlyでないならonMouseOver時に現在の☆の数を更新 */
+            , onMouseOver: !this.props.readonly ? this.setTemp.bind(this, i) : undefined
+          },
+          '\u2606'
+        ));
+      }
+      return _react2.default.createElement(
+        'div',
+        {
+          className: (0, _classnames2.default)({
+            'Rating': true,
+            'RatingReadonly': this.props.readonly
+          })
+          /* マウスアウト時に☆の数をRaitingに戻す */
+          , onMouseOut: this.reset.bind(this)
+        },
+        stars,
+        this.props.readonly || !this.props.id ? null : _react2.default.createElement('input', { type: 'hidden', id: this.props.id, value: this.state.rating })
+      );
+    }
+  }]);
+
+  return Rating;
+}(_react.Component);
+
+Rating.propTypes = {
+  defaultValue: _propTypes2.default.number,
+  readonly: _propTypes2.default.bool,
+  max: _propTypes2.default.number
+};
+
+Rating.defaultProps = {
+  defaultValue: 0,
+  max: 5
+};
+
+exports.default = Rating;
+},{"classnames":7,"prop-types":12,"react":22}],5:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -317,6 +450,8 @@ var Suggest = function (_Component) {
     };
     return _this;
   }
+  // フォームに入力されている値を取得するメソッド
+
 
   _createClass(Suggest, [{
     key: 'getValue',
@@ -328,6 +463,7 @@ var Suggest = function (_Component) {
     value: function render() {
       var _this2 = this;
 
+      // 適当な英数字の羅列を生成
       var randomid = Math.random().toString(16).substring(2);
       return _react2.default.createElement(
         'div',
@@ -358,7 +494,7 @@ Suggest.propTypes = {
 };
 
 exports.default = Suggest;
-},{"prop-types":11,"react":21}],5:[function(require,module,exports){
+},{"prop-types":12,"react":22}],6:[function(require,module,exports){
 'use strict';
 
 var _react = require('react');
@@ -380,6 +516,10 @@ var _Button2 = _interopRequireDefault(_Button);
 var _Suggest = require('./components/Suggest');
 
 var _Suggest2 = _interopRequireDefault(_Suggest);
+
+var _Rating = require('./components/Rating');
+
+var _Rating2 = _interopRequireDefault(_Rating);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -453,9 +593,38 @@ _reactDom2.default.render(_react2.default.createElement(
     null,
     '\u30FBPrint datalist element.',
     _react2.default.createElement(_Suggest2.default, { options: ['eenie', 'meenie', 'miney', 'mo'] })
+  ),
+  _react2.default.createElement(
+    'h2',
+    null,
+    '\u25A0Rating'
+  ),
+  _react2.default.createElement(
+    'div',
+    null,
+    '\u30FBNone default value.',
+    _react2.default.createElement(_Rating2.default, null)
+  ),
+  _react2.default.createElement(
+    'div',
+    null,
+    '\u30FBdefault value is 4.',
+    _react2.default.createElement(_Rating2.default, { defaultValue: 4 })
+  ),
+  _react2.default.createElement(
+    'div',
+    null,
+    '\u30FBMax value is 11.',
+    _react2.default.createElement(_Rating2.default, { max: 11 })
+  ),
+  _react2.default.createElement(
+    'div',
+    null,
+    '\u30FBRead only.',
+    _react2.default.createElement(_Rating2.default, { readonly: true, defaultValue: 3 })
   )
 ), document.getElementById('pad'));
-},{"./components/Button":2,"./components/Logo":3,"./components/Suggest":4,"react":21,"react-dom":15}],6:[function(require,module,exports){
+},{"./components/Button":2,"./components/Logo":3,"./components/Rating":4,"./components/Suggest":5,"react":22,"react-dom":16}],7:[function(require,module,exports){
 /*!
   Copyright (c) 2017 Jed Watson.
   Licensed under the MIT License (MIT), see
@@ -509,7 +678,7 @@ _reactDom2.default.render(_react2.default.createElement(
 	}
 }());
 
-},{}],7:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 /*
 object-assign
 (c) Sindre Sorhus
@@ -601,7 +770,7 @@ module.exports = shouldUseNative() ? Object.assign : function (target, source) {
 	return to;
 };
 
-},{}],8:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 (function (process){
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
@@ -707,7 +876,7 @@ checkPropTypes.resetWarningCache = function() {
 module.exports = checkPropTypes;
 
 }).call(this,require('_process'))
-},{"./lib/ReactPropTypesSecret":12,"_process":1}],9:[function(require,module,exports){
+},{"./lib/ReactPropTypesSecret":13,"_process":1}],10:[function(require,module,exports){
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
  *
@@ -773,7 +942,7 @@ module.exports = function() {
   return ReactPropTypes;
 };
 
-},{"./lib/ReactPropTypesSecret":12}],10:[function(require,module,exports){
+},{"./lib/ReactPropTypesSecret":13}],11:[function(require,module,exports){
 (function (process){
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
@@ -1368,7 +1537,7 @@ module.exports = function(isValidElement, throwOnDirectAccess) {
 };
 
 }).call(this,require('_process'))
-},{"./checkPropTypes":8,"./lib/ReactPropTypesSecret":12,"_process":1,"object-assign":7,"react-is":18}],11:[function(require,module,exports){
+},{"./checkPropTypes":9,"./lib/ReactPropTypesSecret":13,"_process":1,"object-assign":8,"react-is":19}],12:[function(require,module,exports){
 (function (process){
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
@@ -1391,7 +1560,7 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 }).call(this,require('_process'))
-},{"./factoryWithThrowingShims":9,"./factoryWithTypeCheckers":10,"_process":1,"react-is":18}],12:[function(require,module,exports){
+},{"./factoryWithThrowingShims":10,"./factoryWithTypeCheckers":11,"_process":1,"react-is":19}],13:[function(require,module,exports){
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
  *
@@ -1405,7 +1574,7 @@ var ReactPropTypesSecret = 'SECRET_DO_NOT_PASS_THIS_OR_YOU_WILL_BE_FIRED';
 
 module.exports = ReactPropTypesSecret;
 
-},{}],13:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 (function (process){
 /** @license React v16.13.1
  * react-dom.development.js
@@ -26421,7 +26590,7 @@ exports.version = ReactVersion;
 }
 
 }).call(this,require('_process'))
-},{"_process":1,"object-assign":7,"prop-types/checkPropTypes":8,"react":21,"scheduler":26,"scheduler/tracing":27}],14:[function(require,module,exports){
+},{"_process":1,"object-assign":8,"prop-types/checkPropTypes":9,"react":22,"scheduler":27,"scheduler/tracing":28}],15:[function(require,module,exports){
 /** @license React v16.13.1
  * react-dom.production.min.js
  *
@@ -26715,7 +26884,7 @@ exports.flushSync=function(a,b){if((W&(fj|gj))!==V)throw Error(u(187));var c=W;W
 exports.unmountComponentAtNode=function(a){if(!gk(a))throw Error(u(40));return a._reactRootContainer?(Nj(function(){ik(null,null,a,!1,function(){a._reactRootContainer=null;a[Od]=null})}),!0):!1};exports.unstable_batchedUpdates=Mj;exports.unstable_createPortal=function(a,b){return kk(a,b,2<arguments.length&&void 0!==arguments[2]?arguments[2]:null)};
 exports.unstable_renderSubtreeIntoContainer=function(a,b,c,d){if(!gk(c))throw Error(u(200));if(null==a||void 0===a._reactInternalFiber)throw Error(u(38));return ik(a,b,c,!1,d)};exports.version="16.13.1";
 
-},{"object-assign":7,"react":21,"scheduler":26}],15:[function(require,module,exports){
+},{"object-assign":8,"react":22,"scheduler":27}],16:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -26757,7 +26926,7 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 }).call(this,require('_process'))
-},{"./cjs/react-dom.development.js":13,"./cjs/react-dom.production.min.js":14,"_process":1}],16:[function(require,module,exports){
+},{"./cjs/react-dom.development.js":14,"./cjs/react-dom.production.min.js":15,"_process":1}],17:[function(require,module,exports){
 (function (process){
 /** @license React v16.13.1
  * react-is.development.js
@@ -26942,7 +27111,7 @@ exports.typeOf = typeOf;
 }
 
 }).call(this,require('_process'))
-},{"_process":1}],17:[function(require,module,exports){
+},{"_process":1}],18:[function(require,module,exports){
 /** @license React v16.13.1
  * react-is.production.min.js
  *
@@ -26959,7 +27128,7 @@ exports.Profiler=g;exports.StrictMode=f;exports.Suspense=p;exports.isAsyncMode=f
 exports.isMemo=function(a){return z(a)===r};exports.isPortal=function(a){return z(a)===d};exports.isProfiler=function(a){return z(a)===g};exports.isStrictMode=function(a){return z(a)===f};exports.isSuspense=function(a){return z(a)===p};
 exports.isValidElementType=function(a){return"string"===typeof a||"function"===typeof a||a===e||a===m||a===g||a===f||a===p||a===q||"object"===typeof a&&null!==a&&(a.$$typeof===t||a.$$typeof===r||a.$$typeof===h||a.$$typeof===k||a.$$typeof===n||a.$$typeof===w||a.$$typeof===x||a.$$typeof===y||a.$$typeof===v)};exports.typeOf=z;
 
-},{}],18:[function(require,module,exports){
+},{}],19:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -26970,7 +27139,7 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 }).call(this,require('_process'))
-},{"./cjs/react-is.development.js":16,"./cjs/react-is.production.min.js":17,"_process":1}],19:[function(require,module,exports){
+},{"./cjs/react-is.development.js":17,"./cjs/react-is.production.min.js":18,"_process":1}],20:[function(require,module,exports){
 (function (process){
 /** @license React v16.13.1
  * react.development.js
@@ -28886,7 +29055,7 @@ exports.version = ReactVersion;
 }
 
 }).call(this,require('_process'))
-},{"_process":1,"object-assign":7,"prop-types/checkPropTypes":8}],20:[function(require,module,exports){
+},{"_process":1,"object-assign":8,"prop-types/checkPropTypes":9}],21:[function(require,module,exports){
 /** @license React v16.13.1
  * react.production.min.js
  *
@@ -28913,7 +29082,7 @@ key:d,ref:g,props:e,_owner:k}};exports.createContext=function(a,b){void 0===b&&(
 exports.lazy=function(a){return{$$typeof:A,_ctor:a,_status:-1,_result:null}};exports.memo=function(a,b){return{$$typeof:z,type:a,compare:void 0===b?null:b}};exports.useCallback=function(a,b){return Z().useCallback(a,b)};exports.useContext=function(a,b){return Z().useContext(a,b)};exports.useDebugValue=function(){};exports.useEffect=function(a,b){return Z().useEffect(a,b)};exports.useImperativeHandle=function(a,b,c){return Z().useImperativeHandle(a,b,c)};
 exports.useLayoutEffect=function(a,b){return Z().useLayoutEffect(a,b)};exports.useMemo=function(a,b){return Z().useMemo(a,b)};exports.useReducer=function(a,b,c){return Z().useReducer(a,b,c)};exports.useRef=function(a){return Z().useRef(a)};exports.useState=function(a){return Z().useState(a)};exports.version="16.13.1";
 
-},{"object-assign":7}],21:[function(require,module,exports){
+},{"object-assign":8}],22:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -28924,7 +29093,7 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 }).call(this,require('_process'))
-},{"./cjs/react.development.js":19,"./cjs/react.production.min.js":20,"_process":1}],22:[function(require,module,exports){
+},{"./cjs/react.development.js":20,"./cjs/react.production.min.js":21,"_process":1}],23:[function(require,module,exports){
 (function (process){
 /** @license React v0.19.1
  * scheduler-tracing.development.js
@@ -29277,7 +29446,7 @@ exports.unstable_wrap = unstable_wrap;
 }
 
 }).call(this,require('_process'))
-},{"_process":1}],23:[function(require,module,exports){
+},{"_process":1}],24:[function(require,module,exports){
 /** @license React v0.19.1
  * scheduler-tracing.production.min.js
  *
@@ -29289,7 +29458,7 @@ exports.unstable_wrap = unstable_wrap;
 
 'use strict';var b=0;exports.__interactionsRef=null;exports.__subscriberRef=null;exports.unstable_clear=function(a){return a()};exports.unstable_getCurrent=function(){return null};exports.unstable_getThreadID=function(){return++b};exports.unstable_subscribe=function(){};exports.unstable_trace=function(a,d,c){return c()};exports.unstable_unsubscribe=function(){};exports.unstable_wrap=function(a){return a};
 
-},{}],24:[function(require,module,exports){
+},{}],25:[function(require,module,exports){
 (function (process){
 /** @license React v0.19.1
  * scheduler.development.js
@@ -30151,7 +30320,7 @@ exports.unstable_wrapCallback = unstable_wrapCallback;
 }
 
 }).call(this,require('_process'))
-},{"_process":1}],25:[function(require,module,exports){
+},{"_process":1}],26:[function(require,module,exports){
 /** @license React v0.19.1
  * scheduler.production.min.js
  *
@@ -30174,7 +30343,7 @@ exports.unstable_getCurrentPriorityLevel=function(){return R};exports.unstable_g
 exports.unstable_scheduleCallback=function(a,b,c){var d=exports.unstable_now();if("object"===typeof c&&null!==c){var e=c.delay;e="number"===typeof e&&0<e?d+e:d;c="number"===typeof c.timeout?c.timeout:Y(a)}else c=Y(a),e=d;c=e+c;a={id:P++,callback:b,priorityLevel:a,startTime:e,expirationTime:c,sortIndex:-1};e>d?(a.sortIndex=e,J(O,a),null===L(N)&&a===L(O)&&(U?h():U=!0,g(W,e-d))):(a.sortIndex=c,J(N,a),T||S||(T=!0,f(X)));return a};
 exports.unstable_shouldYield=function(){var a=exports.unstable_now();V(a);var b=L(N);return b!==Q&&null!==Q&&null!==b&&null!==b.callback&&b.startTime<=a&&b.expirationTime<Q.expirationTime||k()};exports.unstable_wrapCallback=function(a){var b=R;return function(){var c=R;R=b;try{return a.apply(this,arguments)}finally{R=c}}};
 
-},{}],26:[function(require,module,exports){
+},{}],27:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -30185,7 +30354,7 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 }).call(this,require('_process'))
-},{"./cjs/scheduler.development.js":24,"./cjs/scheduler.production.min.js":25,"_process":1}],27:[function(require,module,exports){
+},{"./cjs/scheduler.development.js":25,"./cjs/scheduler.production.min.js":26,"_process":1}],28:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -30196,4 +30365,4 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 }).call(this,require('_process'))
-},{"./cjs/scheduler-tracing.development.js":22,"./cjs/scheduler-tracing.production.min.js":23,"_process":1}]},{},[5]);
+},{"./cjs/scheduler-tracing.development.js":23,"./cjs/scheduler-tracing.production.min.js":24,"_process":1}]},{},[6]);

@@ -40,6 +40,8 @@ var Suggest = function (_Component) {
     };
     return _this;
   }
+  // フォームに入力されている値を取得するメソッド
+
 
   _createClass(Suggest, [{
     key: 'getValue',
@@ -51,6 +53,7 @@ var Suggest = function (_Component) {
     value: function render() {
       var _this2 = this;
 
+      // 適当な英数字の羅列を生成
       var randomid = Math.random().toString(16).substring(2);
       return _react2.default.createElement(
         'div',

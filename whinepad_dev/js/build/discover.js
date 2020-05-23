@@ -20,6 +20,10 @@ var _Suggest = require('./components/Suggest');
 
 var _Suggest2 = _interopRequireDefault(_Suggest);
 
+var _Rating = require('./components/Rating');
+
+var _Rating2 = _interopRequireDefault(_Rating);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 _reactDom2.default.render(_react2.default.createElement(
@@ -92,5 +96,34 @@ _reactDom2.default.render(_react2.default.createElement(
     null,
     '\u30FBPrint datalist element.',
     _react2.default.createElement(_Suggest2.default, { options: ['eenie', 'meenie', 'miney', 'mo'] })
+  ),
+  _react2.default.createElement(
+    'h2',
+    null,
+    '\u25A0Rating'
+  ),
+  _react2.default.createElement(
+    'div',
+    null,
+    '\u30FBNone default value.',
+    _react2.default.createElement(_Rating2.default, null)
+  ),
+  _react2.default.createElement(
+    'div',
+    null,
+    '\u30FBdefault value is 4.',
+    _react2.default.createElement(_Rating2.default, { defaultValue: 4 })
+  ),
+  _react2.default.createElement(
+    'div',
+    null,
+    '\u30FBMax value is 11.',
+    _react2.default.createElement(_Rating2.default, { max: 11 })
+  ),
+  _react2.default.createElement(
+    'div',
+    null,
+    '\u30FBRead only.',
+    _react2.default.createElement(_Rating2.default, { readonly: true, defaultValue: 3 })
   )
 ), document.getElementById('pad'));
