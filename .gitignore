@@ -2,3 +2,5 @@ chapter4/node_modules/
 .vscode/launch.json
 whinepad_v0.0.1/node_modules/
 whinepad_v0.0.1/.vscode/launch.json
+whinepad_dev/node_modules/
+whinepad_dev/.vscode/launch.json

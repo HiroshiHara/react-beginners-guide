@@ -187,49 +187,60 @@ process.umask = function() { return 0; };
 },{}],2:[function(require,module,exports){
 'use strict';
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+/*
+  classnames library
+  You can get classnames library by 'npm install --save-dev classnames'.
+  It have only classNames([className]...) method.
+  This method return multiple classNames.
+  More detail @see https://www.npmjs.com/package/classnames
+*/
+
+
 var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactDom = require('react-dom');
+var _classnames = require('classnames');
 
-var _reactDom2 = _interopRequireDefault(_reactDom);
+var _classnames2 = _interopRequireDefault(_classnames);
 
-var _Logo = require('./components/Logo');
+var _propTypes = require('prop-types');
 
-var _Logo2 = _interopRequireDefault(_Logo);
-
-var _Excel = require('./components/Excel');
-
-var _Excel2 = _interopRequireDefault(_Excel);
+var _propTypes2 = _interopRequireDefault(_propTypes);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-// 表データ読み込み
-var headers = localStorage.getItem('headers');
-var data = localStorage.getItem('data');
-if (!headers) {
-  headers = ['タイトル', '年', '評価', 'コメント'];
-  data = [['テスト', '2020', '3', 'あああ']];
+// functional component
+// functional component is only return DOM elements.
+// It has not state.
+// argument 'props' has all properties from Caller.
+function Button(props) {
+  var cssclasses = (0, _classnames2.default)('Button', props.className);
+  if (props.href) {
+    return _react2.default.createElement('a', _extends({}, props, { className: cssclasses }));
+  } else {
+    return _react2.default.createElement('button', _extends({}, props, { className: cssclasses }));
+  }
 }
 
-_reactDom2.default.render(_react2.default.createElement(
-  'div',
-  null,
-  _react2.default.createElement(
-    'h1',
-    null,
-    _react2.default.createElement(_Logo2.default, null),
-    'Welcome to Whinepad!'
-  ),
-  _react2.default.createElement(_Excel2.default, { headers: headers, initialData: data })
-), document.getElementById('pad'));
-},{"./components/Excel":3,"./components/Logo":4,"react":19,"react-dom":13}],3:[function(require,module,exports){
+Button.propsTypes = {
+  href: _propTypes2.default.string
+};
+
+exports.default = Button;
+},{"classnames":8,"prop-types":13,"react":23}],3:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -241,6 +252,14 @@ var _propTypes = require('prop-types');
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
+var _Rating = require('./Rating');
+
+var _Rating2 = _interopRequireDefault(_Rating);
+
+var _Suggest = require('./Suggest');
+
+var _Suggest2 = _interopRequireDefault(_Suggest);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -248,393 +267,74 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-// Since React v15.5, PropTypes is separated from React.
-// You should import PropTypes and Replace decralation of React.PropTypes to PropTypes.
 
+var FormInput = function (_Component) {
+  _inherits(FormInput, _Component);
 
-var Excel = function (_React$Component) {
-  _inherits(Excel, _React$Component);
+  function FormInput() {
+    _classCallCheck(this, FormInput);
 
-  function Excel(props) {
-    _classCallCheck(this, Excel);
-
-    var _this = _possibleConstructorReturn(this, (Excel.__proto__ || Object.getPrototypeOf(Excel)).call(this, props));
-
-    _this.headers = _this.props.headers;
-    _this.initialData = _this.props.initialData;
-    _this._preSearchData = null;
-    _this._log = [];
-    _this._logIdx = 0;
-    // instead getInitialState()
-    _this.state = {
-      // 表の初期データ
-      data: _this.initialData,
-      // 並べ替えの基準となっている列のインデックス
-      sortby: null,
-      // 昇順か降順かを表す真偽値
-      descending: false,
-      // row: 行番号, cell: 列番号
-      edit: null,
-      // 検索機能のON/OFFを管理する真偽値
-      search: false
-    };
-    _this._toggleSearch = _this._toggleSearch.bind(_this);
-    _this._sort = _this._sort.bind(_this);
-    _this._showEditor = _this._showEditor.bind(_this);
-    _this._logSetState = _this._logSetState.bind(_this);
-    _this._search = _this._search.bind(_this);
-    _this._save = _this._save.bind(_this);
-    return _this;
+    return _possibleConstructorReturn(this, (FormInput.__proto__ || Object.getPrototypeOf(FormInput)).apply(this, arguments));
   }
-  // ===============リプレイ機能のためのメソッド群===============
 
-
-  _createClass(Excel, [{
-    key: 'componentDidMount',
-    value: function componentDidMount() {
-      document.onkeydown = function (e) {
-        // Alt + Shift + Rでリプレイ実行
-        if (e.altKey && e.shiftKey && e.keyCode === 82) {
-          this._reply();
-        }
-        // Alt + z でアンドゥ
-        if (e.altKey && e.keyCode === 90) {
-          this._undo();
-        }
-        // Alt + Shift + zでリドゥ
-        if (e.altKey && e.shiftKey && e.keyCode === 88) {
-          this._redo();
-        }
-      }.bind(this);
-    }
-  }, {
-    key: '_reply',
-    value: function _reply() {
-      if (this._log.length === 0) {
-        console.warn('stateが記録されていません');
-        return;
-      }
-      var idx = -1;
-      var interval = setInterval(function () {
-        idx++;
-        if (idx === this._log.length - 1) {
-          clearInterval(interval);
-        }
-        this.setState(this._log[idx]);
-      }.bind(this), 1000);
-    }
-  }, {
-    key: '_undo',
-    value: function _undo() {
-      if (this._logIdx === 0) {
-        console.warn('これより前のstateはありません');
-        return;
-      }
-      this.setState(this._log[this._logIdx - 1]);
-      this._logIdx--;
-    }
-  }, {
-    key: '_redo',
-    value: function _redo() {
-      if (this._log.length <= this._logIdx) {
-        console.warn('これより後のstateはありません');
-        return;
-      }
-      this._logIdx++;
-      this.setState(this._log[this._logIdx - 1]);
-    }
-    // ===============ヘッダーをクリックしてソートするメソッド===============
-
-  }, {
-    key: '_sort',
-    value: function _sort(e) {
-      console.log('----------- start _sort()----------------');
-      // tableに対してcellIndexプロパティを指定すると、そのth(td)の行内における添字を取得できる(ReactではなくDOMの機能)
-      var column = e.target.cellIndex;
-      // 昇順か降順かを決定する
-      var descending = false;
-      // 1.クリックされた列が現在の基準の列と同じ
-      if (column === this.state.sortby) {
-        // 2.現在昇順でソートされている
-        if (!this.state.descending) {
-          // 降順に変更する
-          descending = true;
-        }
-      }
-      // 並べ替えの元となるデータを現在のstateからコピーする(Array.from(配列)で配列のシャローコピーを取得)
-      var data = Array.from(this.state.data);
-      // 配列のコピーをArray.sort()で行う
-      data.sort(function (a, b) {
-        // 文字コードが若いほうが先にくるソート
-        return descending ? a[column] > b[column] ? 1 : -1 : a[column] < b[column] ? 1 : -1;
-      });
-      // ソートしたdataを_logSetStateで更新する
-      this._logSetState({
-        data: data,
-        sortby: column,
-        descending: descending
-      });
-      console.log('----------- end   _sort()----------------');
-    }
-    // ===============セルをダブルクリックしたとき、そのセルの位置を記憶するメソッド===============
-
-  }, {
-    key: '_showEditor',
-    value: function _showEditor(e) {
-      console.log('----------- start _showEditor()----------------');
-      // stateにeditプロパティを追加する
-      this._logSetState({
-        edit: {
-          // 各行にdata-*(カスタムデータ属性)を追加し、datasetから行番号を取得できるようにする
-          row: parseInt(e.target.dataset.row, 10),
-          cell: e.target.cellIndex
-        }
-      });
-      console.log('----------- end   _showEditor()----------------');
-    }
-    // ===============セルの入力フィールドでEnterしたときのメソッド===============
-
-  }, {
-    key: '_save',
-    value: function _save(e) {
-      console.log('----------- start _save()----------------');
-      // formのsubmit処理(デフォルトで発生する)を無効化する
-      e.preventDefault();
-      // form要素の子(input)を取得する
-      var input = e.target.firstChild;
-      // 現在の表データのシャローコピーを取得する
-      var data = Array.from(this.state.data);
-      data[this.state.edit.row][this.state.edit.cell] = input.value;
-      // stateを更新する
-      this._logSetState({
-        data: data,
-        // イベントが終わるので保持していたセルの情報をクリアする
-        edit: null
-      });
-      console.log('----------- end   _save()----------------');
-    }
-    // ===============検索ボタンの押下時に検索機能のON/OFFを切り替えるメソッド===============
-
-  }, {
-    key: '_toggleSearch',
-    value: function _toggleSearch() {
-      console.log('----------- start _toggleSearch()----------------');
-      if (this.state.search) {
-        // 検索機能をOFFにするとき、表データを保存しておいたものに戻す
-        this._logSetState({
-          search: false,
-          data: this._preSearchData
-        });
-        this._preSearchData = null;
+  _createClass(FormInput, [{
+    key: 'getValue',
+    value: function getValue() {
+      // refを用いて汎用的に使えるgetValueを定義
+      var inputValue = this.refs.input.value;
+      if (inputValue) {
+        // DOMのvalue属性がある→textかtextareaなのでそのまま返せる
+        return inputValue;
       } else {
-        // 検索機能をONにするとき、表データを保存しておく
-        this._preSearchData = this.state.data;
-        this._logSetState({
-          search: true
-        });
+        // 独自入力フィールドのときはそのコンポーネントのgetValueを実行
+        return this.refs.input.getValue();
       }
-      console.log('----------- end   _toggleSearch()----------------');
     }
-    // ===============検索を実行するメソッド===============
-
-  }, {
-    key: '_search',
-    value: function _search(e) {
-      console.log('----------- start _search()----------------');
-      // 入力文字列を取得
-      var needle = e.target.value.toLowerCase();
-      // 検索文字列が空文字だったとき
-      if (!needle) {
-        // 表データをもとに戻す
-        this._logSetState({ data: this._preSearchData });
-        return;
-      }
-      // 入力欄の列インデックスを取得
-      var idx = e.target.dataset.idx;
-      // 保存してある元データの参照から検索結果を取得
-      var searchdata = this._preSearchData.filter(function (row) {
-        // 行データを文字列にしてその中に検索文字列が見つかるか否か
-        return row[idx].toString().toLowerCase().indexOf(needle) > -1;
-      });
-      this._logSetState({ data: searchdata });
-      console.log('----------- end   _search()----------------');
-    }
-    // ===============setState実行とともにStateを記録するメソッド===============
-
-  }, {
-    key: '_logSetState',
-    value: function _logSetState(newState) {
-      this._log.push(JSON.parse(JSON.stringify(this._log.length === 0 ? this.state : newState)));
-      this.setState(newState);
-      this._logIdx++;
-    }
-    // ===============json, csvのダウンロードメソッド===============
-
-  }, {
-    key: '_download',
-    value: function _download(format, ev) {
-      var outputdata = null;
-      if (format === 'json') {
-        outputdata = JSON.stringify(this.state.data);
-      } else {
-        outputdata = this.state.data.reduce(function (result, row) {
-          return result + row.reduce(function (rowresult, cell, idx) {
-            return rowresult + '"' + cell.replace(/"/g, '""') + '"' + (idx < row.length - 1 ? ',' : '');
-          }, '') + "\n";
-        }, '');
-      }
-      var URL = window.URL || window.webkitURL;
-      var blob = new Blob([outputdata], { type: 'text/' + format });
-      ev.target.href = URL.createObjectURL(blob);
-      ev.target.download = 'data.' + format;
-    }
-    // ===============検索機能がONのときに表に検索バーを描画するrender===============
-
-  }, {
-    key: '_renderSearch',
-    value: function _renderSearch() {
-      if (!this.state.search) {
-        return null;
-      }
-      return _react2.default.createElement(
-        'tr',
-        { onChange: this._search },
-        this.props.headers.map(function (_ignore, idx) {
-          return _react2.default.createElement(
-            'td',
-            { key: idx },
-            _react2.default.createElement('input', { type: 'text', 'data-idx': idx })
-          );
-        })
-      );
-    }
-    // ===============検索ボタンを描画するrender===============
-
-  }, {
-    key: '_renderToolbar',
-    value: function _renderToolbar() {
-      return _react2.default.createElement(
-        'div',
-        { className: 'toolbar' },
-        _react2.default.createElement(
-          'button',
-          { onClick: this._toggleSearch },
-          '\u691C\u7D22'
-        ),
-        _react2.default.createElement(
-          'a',
-          { href: 'data.json', onClick: this._download.bind(this, 'json') },
-          'JSON\u3067\u4FDD\u5B58'
-        ),
-        _react2.default.createElement(
-          'a',
-          { href: 'data.csv', onClick: this._download.bind(this, 'csv') },
-          'CSV\u3067\u4FDD\u5B58'
-        )
-      );
-    }
-    // ===============表を描画するrender===============
-
-  }, {
-    key: '_renderTable',
-    value: function _renderTable() {
-      return _react2.default.createElement(
-        'table',
-        null,
-        _react2.default.createElement(
-          'thead',
-          { onClick: this._sort },
-          _react2.default.createElement(
-            'tr',
-            null,
-            this.props.headers.map(function (title, idx) {
-              if (this.state.sortby === idx) {
-                title += this.state.descending ? '↑' : '↓';
-              }
-              return _react2.default.createElement(
-                'th',
-                { key: idx },
-                title
-              );
-            }, this)
-          )
-        ),
-        _react2.default.createElement(
-          'tbody',
-          { onDoubleClick: this._showEditor },
-          this._renderSearch(),
-          this.state.data.map(function (row, rowidx) {
-            return _react2.default.createElement(
-              'tr',
-              { key: rowidx },
-              console.log(row),
-              row.map(function (cell, idx) {
-                var content = cell;
-                var edit = this.state.edit;
-                if (edit) {
-                  if (edit.row === rowidx && edit.cell === idx) {
-                    content = _react2.default.createElement(
-                      'form',
-                      { onSubmit: this._save },
-                      _react2.default.createElement('input', { type: 'text', defaultValue: content })
-                    );
-                  }
-                }
-                return _react2.default.createElement(
-                  'td',
-                  { key: idx, 'data-row': rowidx },
-                  content
-                );
-              }, this)
-            );
-          }, this)
-        )
-      );
-    }
-    // ===============操作方法を表示するrender===============
-
-  }, {
-    key: '_renderDescription',
-    value: function _renderDescription() {
-      return _react2.default.createElement(
-        'div',
-        null,
-        _react2.default.createElement(
-          'p',
-          null,
-          '\u30FBAlt + Shift + Z ... \u64CD\u4F5C\u3092\u518D\u751F'
-        ),
-        _react2.default.createElement(
-          'p',
-          null,
-          '\u30FBAlt + Z         ... \u30A2\u30F3\u30C9\u30A5'
-        ),
-        _react2.default.createElement(
-          'p',
-          null,
-          '\u30FBAlt + Shift + X ... \u30EA\u30C9\u30A5'
-        )
-      );
-    }
-    // ===============メインのrender===============
-
   }, {
     key: 'render',
     value: function render() {
-      return _react2.default.createElement(
-        'div',
-        { className: 'Excel' },
-        this._renderToolbar(),
-        this._renderTable()
-      );
+      // 全ての入力フィールドに共通のプロパティ
+      var common = {
+        id: this.props.id,
+        refs: 'input',
+        defaultValue: this.props.defaultValue
+        // this.props.typeに応じて描画する入力フィールドを変更する
+      };switch (this.props.type) {
+        case 'input':
+          return _react2.default.createElement('input', _extends({ type: 'text' }, common));
+        case 'text':
+          return _react2.default.createElement('textarea', common);
+        case 'year':
+          return _react2.default.createElement('input', _extends({ type: 'number' }, common, {
+            defaultValue: this.props.defaultValue || new Date().getFullYear() }));
+        case 'suggest':
+          return _react2.default.createElement(_Suggest2.default, _extends({}, common, { options: this.props.options }));
+        case 'rating':
+          return _react2.default.createElement(_Rating2.default, _extends({}, common, {
+            defaultValue: parseInt(this.props.defaultValue, 10) }));
+        default:
+          console.error('invalid type.');
+          return _react2.default.createElement(
+            'p',
+            { style: { fontColor: 'red' } },
+            'invalid type.'
+          );
+      }
     }
   }]);
 
-  return Excel;
-}(_react2.default.Component);
+  return FormInput;
+}(_react.Component);
 
-exports.default = Excel;
-},{"prop-types":9,"react":19}],4:[function(require,module,exports){
+FormInput.propTypes = {
+  type: _propTypes2.default.oneOf(['input', 'text', 'year', 'suggest', 'rating']),
+  id: _propTypes2.default.string,
+  options: _propTypes2.default.array,
+  defaultValue: _propTypes2.default.any
+};
+
+exports.default = FormInput;
+},{"./Rating":5,"./Suggest":6,"prop-types":13,"react":23}],4:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -675,7 +375,536 @@ var Logo = function (_React$Component) {
 }(_react2.default.Component);
 
 exports.default = Logo;
-},{"react":19}],5:[function(require,module,exports){
+},{"react":23}],5:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _propTypes = require('prop-types');
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+var _classnames = require('classnames');
+
+var _classnames2 = _interopRequireDefault(_classnames);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Rating = function (_Component) {
+  _inherits(Rating, _Component);
+
+  function Rating(props) {
+    _classCallCheck(this, Rating);
+
+    var _this = _possibleConstructorReturn(this, (Rating.__proto__ || Object.getPrototypeOf(Rating)).call(this, props));
+
+    _this.state = {
+      rating: props.defaultValue,
+      tmpRating: props.defaultValue
+    };
+    return _this;
+  }
+
+  _createClass(Rating, [{
+    key: 'getValue',
+    value: function getValue() {
+      return this.state.rating;
+    }
+    /* Fire on Mouseover. */
+
+  }, {
+    key: 'setTemp',
+    value: function setTemp(rating) {
+      this.setState({
+        tmpRating: rating
+      });
+    }
+    /* Fire on Click. */
+
+  }, {
+    key: 'setRating',
+    value: function setRating(rating) {
+      this.setState({
+        tmpRating: rating,
+        rating: rating
+      });
+    }
+    /* Fire on Mouseout, then clear rating. */
+
+  }, {
+    key: 'reset',
+    value: function reset() {
+      this.setTemp(this.state.rating);
+    }
+    /* Response external access to props */
+
+  }, {
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(newProps) {
+      this.setRating(newProps.defaultValue);
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      // Print stars this.props.max time.
+      var stars = [];
+      for (var i = 1; i <= this.props.max; i++) {
+        stars.push(_react2.default.createElement(
+          'span',
+          {
+            /* 現在の☆の数まで色づけ */
+            className: i <= this.state.tmpRating ? 'RatingOn' : null,
+            key: i
+            /* readonlyでないならonClick時にRatingを決定 */
+            , onClick: !this.props.readonly ? this.setRating.bind(this, i) : undefined
+            /* readonlyでないならonMouseOver時に現在の☆の数を更新 */
+            , onMouseOver: !this.props.readonly ? this.setTemp.bind(this, i) : undefined
+          },
+          '\u2606'
+        ));
+      }
+      return _react2.default.createElement(
+        'div',
+        {
+          className: (0, _classnames2.default)({
+            'Rating': true,
+            'RatingReadonly': this.props.readonly
+          })
+          /* マウスアウト時に☆の数をRaitingに戻す */
+          , onMouseOut: this.reset.bind(this)
+        },
+        stars,
+        this.props.readonly || !this.props.id ? null : _react2.default.createElement('input', { type: 'hidden', id: this.props.id, value: this.state.rating })
+      );
+    }
+  }]);
+
+  return Rating;
+}(_react.Component);
+
+Rating.propTypes = {
+  defaultValue: _propTypes2.default.number,
+  readonly: _propTypes2.default.bool,
+  max: _propTypes2.default.number
+};
+
+Rating.defaultProps = {
+  defaultValue: 0,
+  max: 5
+};
+
+exports.default = Rating;
+},{"classnames":8,"prop-types":13,"react":23}],6:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _propTypes = require('prop-types');
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /*
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 Destructuring assignment + import syntax
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 React... using default keyword. so it is unnessessary '{}'.
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 Component... getting properties from 'react' by Destructuring assginment.
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
+
+
+var Suggest = function (_Component) {
+  _inherits(Suggest, _Component);
+
+  function Suggest(props) {
+    _classCallCheck(this, Suggest);
+
+    var _this = _possibleConstructorReturn(this, (Suggest.__proto__ || Object.getPrototypeOf(Suggest)).call(this, props));
+
+    _this.state = {
+      value: props.defaultValue
+    };
+    return _this;
+  }
+  // フォームに入力されている値を取得するメソッド
+
+
+  _createClass(Suggest, [{
+    key: 'getValue',
+    value: function getValue() {
+      return this.state.value;
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var _this2 = this;
+
+      // 適当な英数字の羅列を生成
+      var randomid = Math.random().toString(16).substring(2);
+      return _react2.default.createElement(
+        'div',
+        null,
+        _react2.default.createElement('input', { type: 'text',
+          list: randomid,
+          defaultValue: this.props.defaultValue,
+          onChange: function onChange(e) {
+            return _this2.setState({ value: e.target.value });
+          },
+          id: this.props.id }),
+        _react2.default.createElement(
+          'datalist',
+          { id: randomid },
+          this.props.options.map(function (item, idx) {
+            return _react2.default.createElement('option', { value: item, key: idx });
+          })
+        )
+      );
+    }
+  }]);
+
+  return Suggest;
+}(_react.Component);
+
+Suggest.propTypes = {
+  options: _propTypes2.default.arrayOf(_propTypes2.default.string)
+};
+
+exports.default = Suggest;
+},{"prop-types":13,"react":23}],7:[function(require,module,exports){
+'use strict';
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactDom = require('react-dom');
+
+var _reactDom2 = _interopRequireDefault(_reactDom);
+
+var _FormInput = require('./components/FormInput');
+
+var _FormInput2 = _interopRequireDefault(_FormInput);
+
+var _Logo = require('./components/Logo');
+
+var _Logo2 = _interopRequireDefault(_Logo);
+
+var _Button = require('./components/Button');
+
+var _Button2 = _interopRequireDefault(_Button);
+
+var _Suggest = require('./components/Suggest');
+
+var _Suggest2 = _interopRequireDefault(_Suggest);
+
+var _Rating = require('./components/Rating');
+
+var _Rating2 = _interopRequireDefault(_Rating);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+_reactDom2.default.render(_react2.default.createElement(
+  'div',
+  { style: { padding: '20px' } },
+  _react2.default.createElement(
+    'h1',
+    { style: { padding: '7px', marginBottom: '15px' } },
+    'Test for Compoments'
+  ),
+  _react2.default.createElement(
+    'div',
+    { className: 'container', style: { padding: '10px', marginBottom: '32px', border: 'solid' } },
+    _react2.default.createElement(
+      'h2',
+      null,
+      '\u25A0Logo'
+    ),
+    _react2.default.createElement(
+      'div',
+      { style: { display: 'inline-block', background: 'purple' } },
+      _react2.default.createElement(
+        'div',
+        null,
+        '\u30FBJust Only print Logo image.',
+        _react2.default.createElement(_Logo2.default, null)
+      )
+    )
+  ),
+  _react2.default.createElement(
+    'div',
+    { className: 'container', style: { padding: '10px', marginBottom: '32px', border: 'solid' } },
+    _react2.default.createElement(
+      'h2',
+      null,
+      '\u25A0Button'
+    ),
+    _react2.default.createElement(
+      'div',
+      null,
+      '\u30FBApply onClick-attribute Button.',
+      _react2.default.createElement(
+        _Button2.default,
+        { onClick: function onClick() {
+            return alert('Clicked!');
+          } },
+        'Button'
+      )
+    ),
+    _react2.default.createElement(
+      'div',
+      null,
+      '\u30FBApply href-attribute Button.',
+      _react2.default.createElement(
+        _Button2.default,
+        { href: 'http://reactjs.com' },
+        'Button'
+      )
+    ),
+    _react2.default.createElement(
+      'div',
+      null,
+      '\u30FBApply className-attribute Button.',
+      _react2.default.createElement(
+        _Button2.default,
+        { className: 'custom' },
+        'Button'
+      )
+    )
+  ),
+  _react2.default.createElement(
+    'div',
+    { className: 'container', style: { padding: '10px', marginBottom: '32px', border: 'solid' } },
+    _react2.default.createElement(
+      'h2',
+      null,
+      '\u25A0Suggest'
+    ),
+    _react2.default.createElement(
+      'div',
+      null,
+      '\u30FBPrint datalist element.',
+      _react2.default.createElement(_Suggest2.default, { options: ['eenie', 'meenie', 'miney', 'mo'] })
+    )
+  ),
+  _react2.default.createElement(
+    'div',
+    { className: 'container', style: { padding: '10px', marginBottom: '32px', border: 'solid' } },
+    _react2.default.createElement(
+      'h2',
+      null,
+      '\u25A0Rating'
+    ),
+    _react2.default.createElement(
+      'div',
+      null,
+      '\u30FBNone default value.',
+      _react2.default.createElement(_Rating2.default, null)
+    ),
+    _react2.default.createElement(
+      'div',
+      null,
+      '\u30FBdefault value is 4.',
+      _react2.default.createElement(_Rating2.default, { defaultValue: 4 })
+    ),
+    _react2.default.createElement(
+      'div',
+      null,
+      '\u30FBMax value is 11.',
+      _react2.default.createElement(_Rating2.default, { max: 11 })
+    ),
+    _react2.default.createElement(
+      'div',
+      null,
+      '\u30FBRead only.',
+      _react2.default.createElement(_Rating2.default, { readonly: true, defaultValue: 3 })
+    )
+  ),
+  _react2.default.createElement(
+    'div',
+    { className: 'container', style: { padding: '10px', marginBottom: '32px', border: 'solid' } },
+    _react2.default.createElement(
+      'h2',
+      null,
+      '\u25A0FormInput'
+    ),
+    _react2.default.createElement(
+      'table',
+      null,
+      _react2.default.createElement(
+        'tbody',
+        null,
+        _react2.default.createElement(
+          'tr',
+          null,
+          _react2.default.createElement(
+            'td',
+            null,
+            'A simple input field.'
+          ),
+          _react2.default.createElement(
+            'td',
+            null,
+            _react2.default.createElement(_FormInput2.default, { type: 'input' })
+          )
+        ),
+        _react2.default.createElement(
+          'tr',
+          null,
+          _react2.default.createElement(
+            'td',
+            null,
+            'Set default value.'
+          ),
+          _react2.default.createElement(
+            'td',
+            null,
+            _react2.default.createElement(_FormInput2.default, { type: 'input', defaultValue: 'This is defalutvalue.' })
+          )
+        ),
+        _react2.default.createElement(
+          'tr',
+          null,
+          _react2.default.createElement(
+            'td',
+            null,
+            'Input field for year.'
+          ),
+          _react2.default.createElement(
+            'td',
+            null,
+            _react2.default.createElement(_FormInput2.default, { type: 'year' })
+          )
+        ),
+        _react2.default.createElement(
+          'tr',
+          null,
+          _react2.default.createElement(
+            'td',
+            null,
+            'Input field for Rating.'
+          ),
+          _react2.default.createElement(
+            'td',
+            null,
+            _react2.default.createElement(_FormInput2.default, { type: 'rating', defaultValue: 4 })
+          )
+        ),
+        _react2.default.createElement(
+          'tr',
+          null,
+          _react2.default.createElement(
+            'td',
+            null,
+            'Input field for Suggest.'
+          ),
+          _react2.default.createElement(
+            'td',
+            null,
+            _react2.default.createElement(_FormInput2.default, {
+              type: 'suggest',
+              options: ['red', 'blue', 'green'],
+              defaultValue: 'green'
+            })
+          )
+        ),
+        _react2.default.createElement(
+          'tr',
+          null,
+          _react2.default.createElement(
+            'td',
+            null,
+            'A simple textarea'
+          ),
+          _react2.default.createElement(
+            'td',
+            null,
+            _react2.default.createElement(_FormInput2.default, { type: 'text' })
+          )
+        )
+      )
+    )
+  )
+), document.getElementById('pad'));
+},{"./components/Button":2,"./components/FormInput":3,"./components/Logo":4,"./components/Rating":5,"./components/Suggest":6,"react":23,"react-dom":17}],8:[function(require,module,exports){
+/*!
+  Copyright (c) 2017 Jed Watson.
+  Licensed under the MIT License (MIT), see
+  http://jedwatson.github.io/classnames
+*/
+/* global define */
+
+(function () {
+	'use strict';
+
+	var hasOwn = {}.hasOwnProperty;
+
+	function classNames () {
+		var classes = [];
+
+		for (var i = 0; i < arguments.length; i++) {
+			var arg = arguments[i];
+			if (!arg) continue;
+
+			var argType = typeof arg;
+
+			if (argType === 'string' || argType === 'number') {
+				classes.push(arg);
+			} else if (Array.isArray(arg) && arg.length) {
+				var inner = classNames.apply(null, arg);
+				if (inner) {
+					classes.push(inner);
+				}
+			} else if (argType === 'object') {
+				for (var key in arg) {
+					if (hasOwn.call(arg, key) && arg[key]) {
+						classes.push(key);
+					}
+				}
+			}
+		}
+
+		return classes.join(' ');
+	}
+
+	if (typeof module !== 'undefined' && module.exports) {
+		classNames.default = classNames;
+		module.exports = classNames;
+	} else if (typeof define === 'function' && typeof define.amd === 'object' && define.amd) {
+		// register as 'classnames', consistent with npm package name
+		define('classnames', [], function () {
+			return classNames;
+		});
+	} else {
+		window.classNames = classNames;
+	}
+}());
+
+},{}],9:[function(require,module,exports){
 /*
 object-assign
 (c) Sindre Sorhus
@@ -767,7 +996,7 @@ module.exports = shouldUseNative() ? Object.assign : function (target, source) {
 	return to;
 };
 
-},{}],6:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 (function (process){
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
@@ -873,7 +1102,7 @@ checkPropTypes.resetWarningCache = function() {
 module.exports = checkPropTypes;
 
 }).call(this,require('_process'))
-},{"./lib/ReactPropTypesSecret":10,"_process":1}],7:[function(require,module,exports){
+},{"./lib/ReactPropTypesSecret":14,"_process":1}],11:[function(require,module,exports){
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
  *
@@ -939,7 +1168,7 @@ module.exports = function() {
   return ReactPropTypes;
 };
 
-},{"./lib/ReactPropTypesSecret":10}],8:[function(require,module,exports){
+},{"./lib/ReactPropTypesSecret":14}],12:[function(require,module,exports){
 (function (process){
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
@@ -1534,7 +1763,7 @@ module.exports = function(isValidElement, throwOnDirectAccess) {
 };
 
 }).call(this,require('_process'))
-},{"./checkPropTypes":6,"./lib/ReactPropTypesSecret":10,"_process":1,"object-assign":5,"react-is":16}],9:[function(require,module,exports){
+},{"./checkPropTypes":10,"./lib/ReactPropTypesSecret":14,"_process":1,"object-assign":9,"react-is":20}],13:[function(require,module,exports){
 (function (process){
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
@@ -1557,7 +1786,7 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 }).call(this,require('_process'))
-},{"./factoryWithThrowingShims":7,"./factoryWithTypeCheckers":8,"_process":1,"react-is":16}],10:[function(require,module,exports){
+},{"./factoryWithThrowingShims":11,"./factoryWithTypeCheckers":12,"_process":1,"react-is":20}],14:[function(require,module,exports){
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
  *
@@ -1571,7 +1800,7 @@ var ReactPropTypesSecret = 'SECRET_DO_NOT_PASS_THIS_OR_YOU_WILL_BE_FIRED';
 
 module.exports = ReactPropTypesSecret;
 
-},{}],11:[function(require,module,exports){
+},{}],15:[function(require,module,exports){
 (function (process){
 /** @license React v16.13.1
  * react-dom.development.js
@@ -26587,7 +26816,7 @@ exports.version = ReactVersion;
 }
 
 }).call(this,require('_process'))
-},{"_process":1,"object-assign":5,"prop-types/checkPropTypes":6,"react":19,"scheduler":24,"scheduler/tracing":25}],12:[function(require,module,exports){
+},{"_process":1,"object-assign":9,"prop-types/checkPropTypes":10,"react":23,"scheduler":28,"scheduler/tracing":29}],16:[function(require,module,exports){
 /** @license React v16.13.1
  * react-dom.production.min.js
  *
@@ -26881,7 +27110,7 @@ exports.flushSync=function(a,b){if((W&(fj|gj))!==V)throw Error(u(187));var c=W;W
 exports.unmountComponentAtNode=function(a){if(!gk(a))throw Error(u(40));return a._reactRootContainer?(Nj(function(){ik(null,null,a,!1,function(){a._reactRootContainer=null;a[Od]=null})}),!0):!1};exports.unstable_batchedUpdates=Mj;exports.unstable_createPortal=function(a,b){return kk(a,b,2<arguments.length&&void 0!==arguments[2]?arguments[2]:null)};
 exports.unstable_renderSubtreeIntoContainer=function(a,b,c,d){if(!gk(c))throw Error(u(200));if(null==a||void 0===a._reactInternalFiber)throw Error(u(38));return ik(a,b,c,!1,d)};exports.version="16.13.1";
 
-},{"object-assign":5,"react":19,"scheduler":24}],13:[function(require,module,exports){
+},{"object-assign":9,"react":23,"scheduler":28}],17:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -26923,7 +27152,7 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 }).call(this,require('_process'))
-},{"./cjs/react-dom.development.js":11,"./cjs/react-dom.production.min.js":12,"_process":1}],14:[function(require,module,exports){
+},{"./cjs/react-dom.development.js":15,"./cjs/react-dom.production.min.js":16,"_process":1}],18:[function(require,module,exports){
 (function (process){
 /** @license React v16.13.1
  * react-is.development.js
@@ -27108,7 +27337,7 @@ exports.typeOf = typeOf;
 }
 
 }).call(this,require('_process'))
-},{"_process":1}],15:[function(require,module,exports){
+},{"_process":1}],19:[function(require,module,exports){
 /** @license React v16.13.1
  * react-is.production.min.js
  *
@@ -27125,7 +27354,7 @@ exports.Profiler=g;exports.StrictMode=f;exports.Suspense=p;exports.isAsyncMode=f
 exports.isMemo=function(a){return z(a)===r};exports.isPortal=function(a){return z(a)===d};exports.isProfiler=function(a){return z(a)===g};exports.isStrictMode=function(a){return z(a)===f};exports.isSuspense=function(a){return z(a)===p};
 exports.isValidElementType=function(a){return"string"===typeof a||"function"===typeof a||a===e||a===m||a===g||a===f||a===p||a===q||"object"===typeof a&&null!==a&&(a.$$typeof===t||a.$$typeof===r||a.$$typeof===h||a.$$typeof===k||a.$$typeof===n||a.$$typeof===w||a.$$typeof===x||a.$$typeof===y||a.$$typeof===v)};exports.typeOf=z;
 
-},{}],16:[function(require,module,exports){
+},{}],20:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -27136,7 +27365,7 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 }).call(this,require('_process'))
-},{"./cjs/react-is.development.js":14,"./cjs/react-is.production.min.js":15,"_process":1}],17:[function(require,module,exports){
+},{"./cjs/react-is.development.js":18,"./cjs/react-is.production.min.js":19,"_process":1}],21:[function(require,module,exports){
 (function (process){
 /** @license React v16.13.1
  * react.development.js
@@ -29052,7 +29281,7 @@ exports.version = ReactVersion;
 }
 
 }).call(this,require('_process'))
-},{"_process":1,"object-assign":5,"prop-types/checkPropTypes":6}],18:[function(require,module,exports){
+},{"_process":1,"object-assign":9,"prop-types/checkPropTypes":10}],22:[function(require,module,exports){
 /** @license React v16.13.1
  * react.production.min.js
  *
@@ -29079,7 +29308,7 @@ key:d,ref:g,props:e,_owner:k}};exports.createContext=function(a,b){void 0===b&&(
 exports.lazy=function(a){return{$$typeof:A,_ctor:a,_status:-1,_result:null}};exports.memo=function(a,b){return{$$typeof:z,type:a,compare:void 0===b?null:b}};exports.useCallback=function(a,b){return Z().useCallback(a,b)};exports.useContext=function(a,b){return Z().useContext(a,b)};exports.useDebugValue=function(){};exports.useEffect=function(a,b){return Z().useEffect(a,b)};exports.useImperativeHandle=function(a,b,c){return Z().useImperativeHandle(a,b,c)};
 exports.useLayoutEffect=function(a,b){return Z().useLayoutEffect(a,b)};exports.useMemo=function(a,b){return Z().useMemo(a,b)};exports.useReducer=function(a,b,c){return Z().useReducer(a,b,c)};exports.useRef=function(a){return Z().useRef(a)};exports.useState=function(a){return Z().useState(a)};exports.version="16.13.1";
 
-},{"object-assign":5}],19:[function(require,module,exports){
+},{"object-assign":9}],23:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -29090,7 +29319,7 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 }).call(this,require('_process'))
-},{"./cjs/react.development.js":17,"./cjs/react.production.min.js":18,"_process":1}],20:[function(require,module,exports){
+},{"./cjs/react.development.js":21,"./cjs/react.production.min.js":22,"_process":1}],24:[function(require,module,exports){
 (function (process){
 /** @license React v0.19.1
  * scheduler-tracing.development.js
@@ -29443,7 +29672,7 @@ exports.unstable_wrap = unstable_wrap;
 }
 
 }).call(this,require('_process'))
-},{"_process":1}],21:[function(require,module,exports){
+},{"_process":1}],25:[function(require,module,exports){
 /** @license React v0.19.1
  * scheduler-tracing.production.min.js
  *
@@ -29455,7 +29684,7 @@ exports.unstable_wrap = unstable_wrap;
 
 'use strict';var b=0;exports.__interactionsRef=null;exports.__subscriberRef=null;exports.unstable_clear=function(a){return a()};exports.unstable_getCurrent=function(){return null};exports.unstable_getThreadID=function(){return++b};exports.unstable_subscribe=function(){};exports.unstable_trace=function(a,d,c){return c()};exports.unstable_unsubscribe=function(){};exports.unstable_wrap=function(a){return a};
 
-},{}],22:[function(require,module,exports){
+},{}],26:[function(require,module,exports){
 (function (process){
 /** @license React v0.19.1
  * scheduler.development.js
@@ -30317,7 +30546,7 @@ exports.unstable_wrapCallback = unstable_wrapCallback;
 }
 
 }).call(this,require('_process'))
-},{"_process":1}],23:[function(require,module,exports){
+},{"_process":1}],27:[function(require,module,exports){
 /** @license React v0.19.1
  * scheduler.production.min.js
  *
@@ -30340,7 +30569,7 @@ exports.unstable_getCurrentPriorityLevel=function(){return R};exports.unstable_g
 exports.unstable_scheduleCallback=function(a,b,c){var d=exports.unstable_now();if("object"===typeof c&&null!==c){var e=c.delay;e="number"===typeof e&&0<e?d+e:d;c="number"===typeof c.timeout?c.timeout:Y(a)}else c=Y(a),e=d;c=e+c;a={id:P++,callback:b,priorityLevel:a,startTime:e,expirationTime:c,sortIndex:-1};e>d?(a.sortIndex=e,J(O,a),null===L(N)&&a===L(O)&&(U?h():U=!0,g(W,e-d))):(a.sortIndex=c,J(N,a),T||S||(T=!0,f(X)));return a};
 exports.unstable_shouldYield=function(){var a=exports.unstable_now();V(a);var b=L(N);return b!==Q&&null!==Q&&null!==b&&null!==b.callback&&b.startTime<=a&&b.expirationTime<Q.expirationTime||k()};exports.unstable_wrapCallback=function(a){var b=R;return function(){var c=R;R=b;try{return a.apply(this,arguments)}finally{R=c}}};
 
-},{}],24:[function(require,module,exports){
+},{}],28:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -30351,7 +30580,7 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 }).call(this,require('_process'))
-},{"./cjs/scheduler.development.js":22,"./cjs/scheduler.production.min.js":23,"_process":1}],25:[function(require,module,exports){
+},{"./cjs/scheduler.development.js":26,"./cjs/scheduler.production.min.js":27,"_process":1}],29:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -30362,4 +30591,4 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 }).call(this,require('_process'))
-},{"./cjs/scheduler-tracing.development.js":20,"./cjs/scheduler-tracing.production.min.js":21,"_process":1}]},{},[2]);
+},{"./cjs/scheduler-tracing.development.js":24,"./cjs/scheduler-tracing.production.min.js":25,"_process":1}]},{},[7]);

@@ -1,3 +1,22 @@
+.Button {
+  background-color: #6f001b;
+  border-radius: 2px;
+  border: 0;
+  box-shadow: 0px 1px 1px #d9d9d9;
+  color: #fff;
+  cursor: pointer;
+  display: inline-block;
+  font-size: 18px;
+  font-weight: bold;
+  padding: 5px 15px;
+  text-decoration: none;
+  transition-duration: 0.1s;
+  transition-property: transform;
+}
+
+.Button:hover {
+  transform: scale(1.1);
+}
 html {
   background: white;
   font-size: 16px;
@@ -51,6 +70,35 @@ td {
   height: 60px;
   width: 100px;
   vertical-align: middle;
+}
+/* thanks to https://css-tricks.com/star-ratings/ */
+.Rating {
+  cursor: pointer;
+  display: inline-block;
+  white-space: nowrap;
+  font-size: 28px;
+}
+
+.Rating.RatingReadonly{
+  cursor: auto;
+}
+
+.Rating > span {
+  color: grey;
+  display: inline-block;
+  position: relative;
+  width: 1.1em;
+}
+
+.Rating .RatingOn:before {
+   color: gold;
+   content: "\2605";
+   left: 0; 
+   padding: 1px;
+   position: absolute;
+}
+.Suggest {
+  
 }
 html {
   background-color: white;
