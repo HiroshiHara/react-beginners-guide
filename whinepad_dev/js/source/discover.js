@@ -2,6 +2,7 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
+import FormInput from './components/FormInput';
 import Logo from './components/Logo';
 import Button from './components/Button';
 import Suggest from './components/Suggest';
@@ -68,11 +69,11 @@ ReactDOM.render(
         <tbody>
           <tr>
             <td>A simple input field.</td>
-            <td><FormInput /></td>
+            <td><FormInput type='input' /></td>
           </tr>
           <tr>
             <td>Set default value.</td>
-            <td><FormInput defaultValue={'This is defalutvalue.'} /></td>
+            <td><FormInput type='input' defaultValue={'This is default value.'} /></td>
           </tr>
           <tr>
             <td>Input field for year.</td>
@@ -88,7 +89,7 @@ ReactDOM.render(
               <FormInput
                 type="suggest"
                 options={['red', 'blue', 'green']}
-                defalutValue="green"
+                defaultValue="green"
               />
             </td>
           </tr>

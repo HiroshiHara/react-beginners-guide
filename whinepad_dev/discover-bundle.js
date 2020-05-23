@@ -233,7 +233,108 @@ Button.propsTypes = {
 };
 
 exports.default = Button;
-},{"classnames":7,"prop-types":12,"react":22}],3:[function(require,module,exports){
+},{"classnames":8,"prop-types":13,"react":23}],3:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _propTypes = require('prop-types');
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+var _Rating = require('./Rating');
+
+var _Rating2 = _interopRequireDefault(_Rating);
+
+var _Suggest = require('./Suggest');
+
+var _Suggest2 = _interopRequireDefault(_Suggest);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var FormInput = function (_Component) {
+  _inherits(FormInput, _Component);
+
+  function FormInput() {
+    _classCallCheck(this, FormInput);
+
+    return _possibleConstructorReturn(this, (FormInput.__proto__ || Object.getPrototypeOf(FormInput)).apply(this, arguments));
+  }
+
+  _createClass(FormInput, [{
+    key: 'getValue',
+    value: function getValue() {
+      // refを用いて汎用的に使えるgetValueを定義
+      var inputValue = this.refs.input.value;
+      if (inputValue) {
+        // DOMのvalue属性がある→textかtextareaなのでそのまま返せる
+        return inputValue;
+      } else {
+        // 独自入力フィールドのときはそのコンポーネントのgetValueを実行
+        return this.refs.input.getValue();
+      }
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      // 全ての入力フィールドに共通のプロパティ
+      var common = {
+        id: this.props.id,
+        refs: 'input',
+        defaultValue: this.props.defaultValue
+        // this.props.typeに応じて描画する入力フィールドを変更する
+      };switch (this.props.type) {
+        case 'input':
+          return _react2.default.createElement('input', _extends({ type: 'text' }, common));
+        case 'text':
+          return _react2.default.createElement('textarea', common);
+        case 'year':
+          return _react2.default.createElement('input', _extends({ type: 'number' }, common, {
+            defaultValue: this.props.defaultValue || new Date().getFullYear() }));
+        case 'suggest':
+          return _react2.default.createElement(_Suggest2.default, _extends({}, common, { options: this.props.options }));
+        case 'rating':
+          return _react2.default.createElement(_Rating2.default, _extends({}, common, {
+            defaultValue: parseInt(this.props.defaultValue, 10) }));
+        default:
+          console.error('invalid type.');
+          return _react2.default.createElement(
+            'p',
+            { style: { fontColor: 'red' } },
+            'invalid type.'
+          );
+      }
+    }
+  }]);
+
+  return FormInput;
+}(_react.Component);
+
+FormInput.propTypes = {
+  type: _propTypes2.default.oneOf(['input', 'text', 'year', 'suggest', 'rating']),
+  id: _propTypes2.default.string,
+  options: _propTypes2.default.array,
+  defaultValue: _propTypes2.default.any
+};
+
+exports.default = FormInput;
+},{"./Rating":5,"./Suggest":6,"prop-types":13,"react":23}],4:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -274,7 +375,7 @@ var Logo = function (_React$Component) {
 }(_react2.default.Component);
 
 exports.default = Logo;
-},{"react":22}],4:[function(require,module,exports){
+},{"react":23}],5:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -407,7 +508,7 @@ Rating.defaultProps = {
 };
 
 exports.default = Rating;
-},{"classnames":7,"prop-types":12,"react":22}],5:[function(require,module,exports){
+},{"classnames":8,"prop-types":13,"react":23}],6:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -494,7 +595,7 @@ Suggest.propTypes = {
 };
 
 exports.default = Suggest;
-},{"prop-types":12,"react":22}],6:[function(require,module,exports){
+},{"prop-types":13,"react":23}],7:[function(require,module,exports){
 'use strict';
 
 var _react = require('react');
@@ -504,6 +605,10 @@ var _react2 = _interopRequireDefault(_react);
 var _reactDom = require('react-dom');
 
 var _reactDom2 = _interopRequireDefault(_reactDom);
+
+var _FormInput = require('./components/FormInput');
+
+var _FormInput2 = _interopRequireDefault(_FormInput);
 
 var _Logo = require('./components/Logo');
 
@@ -638,9 +743,114 @@ _reactDom2.default.render(_react2.default.createElement(
       '\u30FBRead only.',
       _react2.default.createElement(_Rating2.default, { readonly: true, defaultValue: 3 })
     )
+  ),
+  _react2.default.createElement(
+    'div',
+    { className: 'container', style: { padding: '10px', marginBottom: '32px', border: 'solid' } },
+    _react2.default.createElement(
+      'h2',
+      null,
+      '\u25A0FormInput'
+    ),
+    _react2.default.createElement(
+      'table',
+      null,
+      _react2.default.createElement(
+        'tbody',
+        null,
+        _react2.default.createElement(
+          'tr',
+          null,
+          _react2.default.createElement(
+            'td',
+            null,
+            'A simple input field.'
+          ),
+          _react2.default.createElement(
+            'td',
+            null,
+            _react2.default.createElement(_FormInput2.default, { type: 'input' })
+          )
+        ),
+        _react2.default.createElement(
+          'tr',
+          null,
+          _react2.default.createElement(
+            'td',
+            null,
+            'Set default value.'
+          ),
+          _react2.default.createElement(
+            'td',
+            null,
+            _react2.default.createElement(_FormInput2.default, { type: 'input', defaultValue: 'This is defalutvalue.' })
+          )
+        ),
+        _react2.default.createElement(
+          'tr',
+          null,
+          _react2.default.createElement(
+            'td',
+            null,
+            'Input field for year.'
+          ),
+          _react2.default.createElement(
+            'td',
+            null,
+            _react2.default.createElement(_FormInput2.default, { type: 'year' })
+          )
+        ),
+        _react2.default.createElement(
+          'tr',
+          null,
+          _react2.default.createElement(
+            'td',
+            null,
+            'Input field for Rating.'
+          ),
+          _react2.default.createElement(
+            'td',
+            null,
+            _react2.default.createElement(_FormInput2.default, { type: 'rating', defaultValue: 4 })
+          )
+        ),
+        _react2.default.createElement(
+          'tr',
+          null,
+          _react2.default.createElement(
+            'td',
+            null,
+            'Input field for Suggest.'
+          ),
+          _react2.default.createElement(
+            'td',
+            null,
+            _react2.default.createElement(_FormInput2.default, {
+              type: 'suggest',
+              options: ['red', 'blue', 'green'],
+              defaultValue: 'green'
+            })
+          )
+        ),
+        _react2.default.createElement(
+          'tr',
+          null,
+          _react2.default.createElement(
+            'td',
+            null,
+            'A simple textarea'
+          ),
+          _react2.default.createElement(
+            'td',
+            null,
+            _react2.default.createElement(_FormInput2.default, { type: 'text' })
+          )
+        )
+      )
+    )
   )
 ), document.getElementById('pad'));
-},{"./components/Button":2,"./components/Logo":3,"./components/Rating":4,"./components/Suggest":5,"react":22,"react-dom":16}],7:[function(require,module,exports){
+},{"./components/Button":2,"./components/FormInput":3,"./components/Logo":4,"./components/Rating":5,"./components/Suggest":6,"react":23,"react-dom":17}],8:[function(require,module,exports){
 /*!
   Copyright (c) 2017 Jed Watson.
   Licensed under the MIT License (MIT), see
@@ -694,7 +904,7 @@ _reactDom2.default.render(_react2.default.createElement(
 	}
 }());
 
-},{}],8:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 /*
 object-assign
 (c) Sindre Sorhus
@@ -786,7 +996,7 @@ module.exports = shouldUseNative() ? Object.assign : function (target, source) {
 	return to;
 };
 
-},{}],9:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 (function (process){
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
@@ -892,7 +1102,7 @@ checkPropTypes.resetWarningCache = function() {
 module.exports = checkPropTypes;
 
 }).call(this,require('_process'))
-},{"./lib/ReactPropTypesSecret":13,"_process":1}],10:[function(require,module,exports){
+},{"./lib/ReactPropTypesSecret":14,"_process":1}],11:[function(require,module,exports){
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
  *
@@ -958,7 +1168,7 @@ module.exports = function() {
   return ReactPropTypes;
 };
 
-},{"./lib/ReactPropTypesSecret":13}],11:[function(require,module,exports){
+},{"./lib/ReactPropTypesSecret":14}],12:[function(require,module,exports){
 (function (process){
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
@@ -1553,7 +1763,7 @@ module.exports = function(isValidElement, throwOnDirectAccess) {
 };
 
 }).call(this,require('_process'))
-},{"./checkPropTypes":9,"./lib/ReactPropTypesSecret":13,"_process":1,"object-assign":8,"react-is":19}],12:[function(require,module,exports){
+},{"./checkPropTypes":10,"./lib/ReactPropTypesSecret":14,"_process":1,"object-assign":9,"react-is":20}],13:[function(require,module,exports){
 (function (process){
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
@@ -1576,7 +1786,7 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 }).call(this,require('_process'))
-},{"./factoryWithThrowingShims":10,"./factoryWithTypeCheckers":11,"_process":1,"react-is":19}],13:[function(require,module,exports){
+},{"./factoryWithThrowingShims":11,"./factoryWithTypeCheckers":12,"_process":1,"react-is":20}],14:[function(require,module,exports){
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
  *
@@ -1590,7 +1800,7 @@ var ReactPropTypesSecret = 'SECRET_DO_NOT_PASS_THIS_OR_YOU_WILL_BE_FIRED';
 
 module.exports = ReactPropTypesSecret;
 
-},{}],14:[function(require,module,exports){
+},{}],15:[function(require,module,exports){
 (function (process){
 /** @license React v16.13.1
  * react-dom.development.js
@@ -26606,7 +26816,7 @@ exports.version = ReactVersion;
 }
 
 }).call(this,require('_process'))
-},{"_process":1,"object-assign":8,"prop-types/checkPropTypes":9,"react":22,"scheduler":27,"scheduler/tracing":28}],15:[function(require,module,exports){
+},{"_process":1,"object-assign":9,"prop-types/checkPropTypes":10,"react":23,"scheduler":28,"scheduler/tracing":29}],16:[function(require,module,exports){
 /** @license React v16.13.1
  * react-dom.production.min.js
  *
@@ -26900,7 +27110,7 @@ exports.flushSync=function(a,b){if((W&(fj|gj))!==V)throw Error(u(187));var c=W;W
 exports.unmountComponentAtNode=function(a){if(!gk(a))throw Error(u(40));return a._reactRootContainer?(Nj(function(){ik(null,null,a,!1,function(){a._reactRootContainer=null;a[Od]=null})}),!0):!1};exports.unstable_batchedUpdates=Mj;exports.unstable_createPortal=function(a,b){return kk(a,b,2<arguments.length&&void 0!==arguments[2]?arguments[2]:null)};
 exports.unstable_renderSubtreeIntoContainer=function(a,b,c,d){if(!gk(c))throw Error(u(200));if(null==a||void 0===a._reactInternalFiber)throw Error(u(38));return ik(a,b,c,!1,d)};exports.version="16.13.1";
 
-},{"object-assign":8,"react":22,"scheduler":27}],16:[function(require,module,exports){
+},{"object-assign":9,"react":23,"scheduler":28}],17:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -26942,7 +27152,7 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 }).call(this,require('_process'))
-},{"./cjs/react-dom.development.js":14,"./cjs/react-dom.production.min.js":15,"_process":1}],17:[function(require,module,exports){
+},{"./cjs/react-dom.development.js":15,"./cjs/react-dom.production.min.js":16,"_process":1}],18:[function(require,module,exports){
 (function (process){
 /** @license React v16.13.1
  * react-is.development.js
@@ -27127,7 +27337,7 @@ exports.typeOf = typeOf;
 }
 
 }).call(this,require('_process'))
-},{"_process":1}],18:[function(require,module,exports){
+},{"_process":1}],19:[function(require,module,exports){
 /** @license React v16.13.1
  * react-is.production.min.js
  *
@@ -27144,7 +27354,7 @@ exports.Profiler=g;exports.StrictMode=f;exports.Suspense=p;exports.isAsyncMode=f
 exports.isMemo=function(a){return z(a)===r};exports.isPortal=function(a){return z(a)===d};exports.isProfiler=function(a){return z(a)===g};exports.isStrictMode=function(a){return z(a)===f};exports.isSuspense=function(a){return z(a)===p};
 exports.isValidElementType=function(a){return"string"===typeof a||"function"===typeof a||a===e||a===m||a===g||a===f||a===p||a===q||"object"===typeof a&&null!==a&&(a.$$typeof===t||a.$$typeof===r||a.$$typeof===h||a.$$typeof===k||a.$$typeof===n||a.$$typeof===w||a.$$typeof===x||a.$$typeof===y||a.$$typeof===v)};exports.typeOf=z;
 
-},{}],19:[function(require,module,exports){
+},{}],20:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -27155,7 +27365,7 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 }).call(this,require('_process'))
-},{"./cjs/react-is.development.js":17,"./cjs/react-is.production.min.js":18,"_process":1}],20:[function(require,module,exports){
+},{"./cjs/react-is.development.js":18,"./cjs/react-is.production.min.js":19,"_process":1}],21:[function(require,module,exports){
 (function (process){
 /** @license React v16.13.1
  * react.development.js
@@ -29071,7 +29281,7 @@ exports.version = ReactVersion;
 }
 
 }).call(this,require('_process'))
-},{"_process":1,"object-assign":8,"prop-types/checkPropTypes":9}],21:[function(require,module,exports){
+},{"_process":1,"object-assign":9,"prop-types/checkPropTypes":10}],22:[function(require,module,exports){
 /** @license React v16.13.1
  * react.production.min.js
  *
@@ -29098,7 +29308,7 @@ key:d,ref:g,props:e,_owner:k}};exports.createContext=function(a,b){void 0===b&&(
 exports.lazy=function(a){return{$$typeof:A,_ctor:a,_status:-1,_result:null}};exports.memo=function(a,b){return{$$typeof:z,type:a,compare:void 0===b?null:b}};exports.useCallback=function(a,b){return Z().useCallback(a,b)};exports.useContext=function(a,b){return Z().useContext(a,b)};exports.useDebugValue=function(){};exports.useEffect=function(a,b){return Z().useEffect(a,b)};exports.useImperativeHandle=function(a,b,c){return Z().useImperativeHandle(a,b,c)};
 exports.useLayoutEffect=function(a,b){return Z().useLayoutEffect(a,b)};exports.useMemo=function(a,b){return Z().useMemo(a,b)};exports.useReducer=function(a,b,c){return Z().useReducer(a,b,c)};exports.useRef=function(a){return Z().useRef(a)};exports.useState=function(a){return Z().useState(a)};exports.version="16.13.1";
 
-},{"object-assign":8}],22:[function(require,module,exports){
+},{"object-assign":9}],23:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -29109,7 +29319,7 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 }).call(this,require('_process'))
-},{"./cjs/react.development.js":20,"./cjs/react.production.min.js":21,"_process":1}],23:[function(require,module,exports){
+},{"./cjs/react.development.js":21,"./cjs/react.production.min.js":22,"_process":1}],24:[function(require,module,exports){
 (function (process){
 /** @license React v0.19.1
  * scheduler-tracing.development.js
@@ -29462,7 +29672,7 @@ exports.unstable_wrap = unstable_wrap;
 }
 
 }).call(this,require('_process'))
-},{"_process":1}],24:[function(require,module,exports){
+},{"_process":1}],25:[function(require,module,exports){
 /** @license React v0.19.1
  * scheduler-tracing.production.min.js
  *
@@ -29474,7 +29684,7 @@ exports.unstable_wrap = unstable_wrap;
 
 'use strict';var b=0;exports.__interactionsRef=null;exports.__subscriberRef=null;exports.unstable_clear=function(a){return a()};exports.unstable_getCurrent=function(){return null};exports.unstable_getThreadID=function(){return++b};exports.unstable_subscribe=function(){};exports.unstable_trace=function(a,d,c){return c()};exports.unstable_unsubscribe=function(){};exports.unstable_wrap=function(a){return a};
 
-},{}],25:[function(require,module,exports){
+},{}],26:[function(require,module,exports){
 (function (process){
 /** @license React v0.19.1
  * scheduler.development.js
@@ -30336,7 +30546,7 @@ exports.unstable_wrapCallback = unstable_wrapCallback;
 }
 
 }).call(this,require('_process'))
-},{"_process":1}],26:[function(require,module,exports){
+},{"_process":1}],27:[function(require,module,exports){
 /** @license React v0.19.1
  * scheduler.production.min.js
  *
@@ -30359,7 +30569,7 @@ exports.unstable_getCurrentPriorityLevel=function(){return R};exports.unstable_g
 exports.unstable_scheduleCallback=function(a,b,c){var d=exports.unstable_now();if("object"===typeof c&&null!==c){var e=c.delay;e="number"===typeof e&&0<e?d+e:d;c="number"===typeof c.timeout?c.timeout:Y(a)}else c=Y(a),e=d;c=e+c;a={id:P++,callback:b,priorityLevel:a,startTime:e,expirationTime:c,sortIndex:-1};e>d?(a.sortIndex=e,J(O,a),null===L(N)&&a===L(O)&&(U?h():U=!0,g(W,e-d))):(a.sortIndex=c,J(N,a),T||S||(T=!0,f(X)));return a};
 exports.unstable_shouldYield=function(){var a=exports.unstable_now();V(a);var b=L(N);return b!==Q&&null!==Q&&null!==b&&null!==b.callback&&b.startTime<=a&&b.expirationTime<Q.expirationTime||k()};exports.unstable_wrapCallback=function(a){var b=R;return function(){var c=R;R=b;try{return a.apply(this,arguments)}finally{R=c}}};
 
-},{}],27:[function(require,module,exports){
+},{}],28:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -30370,7 +30580,7 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 }).call(this,require('_process'))
-},{"./cjs/scheduler.development.js":25,"./cjs/scheduler.production.min.js":26,"_process":1}],28:[function(require,module,exports){
+},{"./cjs/scheduler.development.js":26,"./cjs/scheduler.production.min.js":27,"_process":1}],29:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -30381,4 +30591,4 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 }).call(this,require('_process'))
-},{"./cjs/scheduler-tracing.development.js":23,"./cjs/scheduler-tracing.production.min.js":24,"_process":1}]},{},[6]);
+},{"./cjs/scheduler-tracing.development.js":24,"./cjs/scheduler-tracing.production.min.js":25,"_process":1}]},{},[7]);
