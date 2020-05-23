@@ -31,99 +31,115 @@ _reactDom2.default.render(_react2.default.createElement(
   { style: { padding: '20px' } },
   _react2.default.createElement(
     'h1',
-    null,
+    { style: { padding: '7px', marginBottom: '15px' } },
     'Test for Compoments'
   ),
   _react2.default.createElement(
-    'h2',
-    null,
-    '\u25A0Logo'
+    'div',
+    { className: 'container', style: { padding: '10px', marginBottom: '32px', border: 'solid' } },
+    _react2.default.createElement(
+      'h2',
+      null,
+      '\u25A0Logo'
+    ),
+    _react2.default.createElement(
+      'div',
+      { style: { display: 'inline-block', background: 'purple' } },
+      _react2.default.createElement(
+        'div',
+        null,
+        '\u30FBJust Only print Logo image.',
+        _react2.default.createElement(_Logo2.default, null)
+      )
+    )
   ),
   _react2.default.createElement(
     'div',
-    { style: { display: 'inline-block', background: 'purple' } },
+    { className: 'container', style: { padding: '10px', marginBottom: '32px', border: 'solid' } },
+    _react2.default.createElement(
+      'h2',
+      null,
+      '\u25A0Button'
+    ),
     _react2.default.createElement(
       'div',
       null,
-      '\u30FBJust Only print Logo image.',
-      _react2.default.createElement(_Logo2.default, null)
-    )
-  ),
-  _react2.default.createElement(
-    'h2',
-    null,
-    '\u25A0Button'
-  ),
-  _react2.default.createElement(
-    'div',
-    null,
-    '\u30FBApply onClick-attribute Button.',
+      '\u30FBApply onClick-attribute Button.',
+      _react2.default.createElement(
+        _Button2.default,
+        { onClick: function onClick() {
+            return alert('Clicked!');
+          } },
+        'Button'
+      )
+    ),
     _react2.default.createElement(
-      _Button2.default,
-      { onClick: function onClick() {
-          return alert('Clicked!');
-        } },
-      'Button'
-    )
-  ),
-  _react2.default.createElement(
-    'div',
-    null,
-    '\u30FBApply href-attribute Button.',
+      'div',
+      null,
+      '\u30FBApply href-attribute Button.',
+      _react2.default.createElement(
+        _Button2.default,
+        { href: 'http://reactjs.com' },
+        'Button'
+      )
+    ),
     _react2.default.createElement(
-      _Button2.default,
-      { href: 'http://reactjs.com' },
-      'Button'
+      'div',
+      null,
+      '\u30FBApply className-attribute Button.',
+      _react2.default.createElement(
+        _Button2.default,
+        { className: 'custom' },
+        'Button'
+      )
     )
   ),
   _react2.default.createElement(
     'div',
-    null,
-    '\u30FBApply className-attribute Button.',
+    { className: 'container', style: { padding: '10px', marginBottom: '32px', border: 'solid' } },
     _react2.default.createElement(
-      _Button2.default,
-      { className: 'custom' },
-      'Button'
+      'h2',
+      null,
+      '\u25A0Suggest'
+    ),
+    _react2.default.createElement(
+      'div',
+      null,
+      '\u30FBPrint datalist element.',
+      _react2.default.createElement(_Suggest2.default, { options: ['eenie', 'meenie', 'miney', 'mo'] })
     )
   ),
   _react2.default.createElement(
-    'h2',
-    null,
-    '\u25A0Suggest'
-  ),
-  _react2.default.createElement(
     'div',
-    null,
-    '\u30FBPrint datalist element.',
-    _react2.default.createElement(_Suggest2.default, { options: ['eenie', 'meenie', 'miney', 'mo'] })
-  ),
-  _react2.default.createElement(
-    'h2',
-    null,
-    '\u25A0Rating'
-  ),
-  _react2.default.createElement(
-    'div',
-    null,
-    '\u30FBNone default value.',
-    _react2.default.createElement(_Rating2.default, null)
-  ),
-  _react2.default.createElement(
-    'div',
-    null,
-    '\u30FBdefault value is 4.',
-    _react2.default.createElement(_Rating2.default, { defaultValue: 4 })
-  ),
-  _react2.default.createElement(
-    'div',
-    null,
-    '\u30FBMax value is 11.',
-    _react2.default.createElement(_Rating2.default, { max: 11 })
-  ),
-  _react2.default.createElement(
-    'div',
-    null,
-    '\u30FBRead only.',
-    _react2.default.createElement(_Rating2.default, { readonly: true, defaultValue: 3 })
+    { className: 'container', style: { padding: '10px', marginBottom: '32px', border: 'solid' } },
+    _react2.default.createElement(
+      'h2',
+      null,
+      '\u25A0Rating'
+    ),
+    _react2.default.createElement(
+      'div',
+      null,
+      '\u30FBNone default value.',
+      _react2.default.createElement(_Rating2.default, null)
+    ),
+    _react2.default.createElement(
+      'div',
+      null,
+      '\u30FBdefault value is 4.',
+      _react2.default.createElement(_Rating2.default, { defaultValue: 4 })
+    ),
+    _react2.default.createElement(
+      'div',
+      null,
+      '\u30FBMax value is 11.',
+      _react2.default.createElement(_Rating2.default, { max: 11 })
+    ),
+    _react2.default.createElement(
+      'div',
+      null,
+      '\u30FBRead only.',
+      _react2.default.createElement(_Rating2.default, { readonly: true, defaultValue: 3 })
+    )
   )
 ), document.getElementById('pad'));
